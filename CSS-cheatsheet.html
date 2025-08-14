@@ -1,0 +1,1595 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Definitive CSS Cheatsheet</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- CSS Variables for Theming (Light/Dark Mode) --- */
+        :root {
+            --bg-gradient-start: #00416a;
+            --bg-gradient-end: #799f0c;
+            --container-bg: rgba(255, 255, 255, 0.98);
+            --text-color: #333;
+            --header-bg-start: #1f4037;
+            --header-bg-end: #99f2c8;
+            --header-text: white;
+            --section-bg: #f8f9fa;
+            --section-border: #007991;
+            --section-h2: #004d40;
+            --section-h3: #007991;
+            --card-bg: white;
+            --card-border: #007991;
+            --code-bg: #1e1e1e;
+            --code-text: #f8f8f2;
+            --interactive-btn-bg: #007991;
+            --interactive-btn-hover: #004d40;
+            --search-bg: #e0f2f1;
+            --search-border: #a7ffeb;
+            --search-focus-border: #007991;
+            --search-focus-shadow: rgba(0, 121, 145, 0.2);
+            --highlight-bg: #ffeb3b;
+            --highlight-text: #333;
+            --toc-bg: rgba(255, 255, 255, 0.1);
+            --toc-link-bg: rgba(255, 255, 255, 0.7);
+            --toc-link-hover-bg: white;
+            --toc-link-text: #1f4037;
+            --footer-bg: #1f4037;
+            --footer-text: #bdc3c7;
+            --table-header-bg: #f2f2f2;
+            --table-border: #ddd;
+        }
+
+        body.dark-mode {
+            --bg-gradient-start: #134e5e;
+            --bg-gradient-end: #71b280;
+            --container-bg: rgba(16, 24, 40, 0.98);
+            --text-color: #e0e0e0;
+            --header-bg-start: #121212;
+            --header-bg-end: #181818;
+            --header-text: #eee;
+            --section-bg: #1e2a47;
+            --section-border: #58a6ff;
+            --section-h2: #80cbc4;
+            --section-h3: #4dd0e1;
+            --card-bg: #101828;
+            --card-border: #58a6ff;
+            --code-bg: #121212;
+            --code-text: #d4d4d4;
+            --interactive-btn-bg: #4dd0e1;
+            --interactive-btn-hover: #80cbc4;
+            --search-bg: #16223f;
+            --search-border: #388bfd;
+            --search-focus-border: #58a6ff;
+            --search-focus-shadow: rgba(88, 166, 255, 0.2);
+            --highlight-bg: #f8e71c;
+            --highlight-text: #111;
+            --toc-bg: rgba(0, 0, 0, 0.2);
+            --toc-link-bg: #1e2a47;
+            --toc-link-hover-bg: #16223f;
+            --toc-link-text: #b0cfff;
+            --footer-bg: #121212;
+            --footer-text: #7f8c8d;
+            --table-header-bg: #2c3e50;
+            --table-border: #444;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Poppins', sans-serif; line-height: 1.7; color: var(--text-color); background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%); min-height: 100vh; padding: 20px; transition: background 0.3s ease, color 0.3s ease; }
+        .container { max-width: 1200px; margin: 0 auto; background: var(--container-bg); border-radius: 20px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); overflow: visible; }
+        .header { background: linear-gradient(135deg, var(--header-bg-start), var(--header-bg-end)); color: var(--header-text); padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+        .header h1 { font-size: 2.5rem; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); }
+        .header p { font-size: 1.1rem; opacity: 0.9; margin-bottom: 10px; }
+        .author-credit { font-size: 0.9rem; font-style: italic; opacity: 0.8; margin-top: 15px; }
+        .content { padding: 40px 40px 0 40px; position: relative; }
+        .toc-container { padding: 20px 40px; background: var(--toc-bg); border-bottom: 2px solid var(--section-border); }
+        .toc-container h3 { text-align: center; margin-bottom: 15px; color: var(--section-h2); font-size: 1.2rem; }
+        .toc-container ul { list-style-type: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 0; }
+        .toc-container li a { display: block; padding: 8px 15px; background-color: var(--toc-link-bg); color: var(--toc-link-text); text-decoration: none; border-radius: 20px; font-size: 0.9rem; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .toc-container li a:hover { background-color: var(--toc-link-hover-bg); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
+        .section { margin-bottom: 60px; background: var(--section-bg); border-radius: 15px; padding: 50px; border-left: 5px solid var(--section-border); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease-out, transform 0.8s ease-out, background 0.3s ease; }
+        .section:last-child { margin-bottom: 0; }
+        .section:last-of-type { margin-bottom: 0; }
+        .section[data-topic="Recommended YouTube Resources"] { margin-bottom: 0; }
+        .section.is-visible { opacity: 1; transform: translateY(0); }
+        .section h2 { color: var(--section-h2); font-size: 2rem; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 2px solid var(--section-border); }
+        .section h3 { color: var(--section-h3); font-size: 1.6rem; margin: 40px 0 20px 0; }
+        .code-block { background: var(--code-bg); border-radius: 12px; padding: 25px; margin: 20px 0; overflow-x: auto; box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3); }
+        .code-block pre { color: var(--code-text); font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 14px; line-height: 1.8; white-space: pre-wrap; word-wrap: break-word; }
+        
+        /* Syntax highlighting for CSS */
+        .selector { color: #f92672; }
+        .property { color: #66d9ef; }
+        .value { color: #a6e22e; }
+        .keyword { color: #ae81ff; }
+        .comment { color: #75715e; font-style: italic; }
+
+        .example { background: #e0f2f1; border: 1px solid var(--section-border); border-radius: 12px; padding: 30px; margin: 25px 0; }
+        .example h4 { color: var(--section-h2); margin-bottom: 15px; font-size: 1.2rem; }
+        .warning { background: #fff3cd; border: 1px solid #ffc107; padding: 25px; margin: 25px 0; border-radius: 12px; }
+        .warning h4 { color: #856404; margin-bottom: 15px; font-size: 1.2rem; }
+        body.dark-mode .example { background: #16223f; }
+        body.dark-mode .example h4 { color: #80cbc4; }
+        body.dark-mode .warning { background: #4d3800; border-color: #ffc107; }
+        body.dark-mode .warning h4 { color: #ffecb3; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; margin: 30px 0; }
+        .card { background: var(--card-bg); border-radius: 12px; padding: 30px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); border-left: 4px solid var(--card-border); transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease; overflow-wrap: break-word; word-wrap: break-word; margin-bottom: 25px; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); }
+        .card h4 { color: var(--section-h2); margin-bottom: 20px; font-size: 1.3rem; }
+        .card ul { padding-left: 20px; }
+        .card li { margin-bottom: 12px; line-height: 1.6; }
+        .interactive-btn { background: var(--interactive-btn-bg); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px; transition: all 0.3s ease; font-family: 'Poppins', sans-serif; font-size: 0.9rem;}
+        .interactive-btn:hover { background: var(--interactive-btn-hover); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); }
+        .output { background: #2c3e50; color: #ecf0f1; padding: 15px; border-radius: 8px; margin-top: 15px; font-family: monospace; min-height: 40px; transition: all 0.3s ease; }
+        body.dark-mode .output { background: var(--card-bg); }
+        
+        .search-container { display: flex; justify-content: center; align-items: center; margin: 0 auto 30px auto; padding: 15px; background: var(--search-bg); border-radius: 10px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05); position: -webkit-sticky; position: sticky; top: 0; z-index: 1000; transition: box-shadow 0.3s ease, background-color 0.3s ease; width: calc(100% - 80px); max-width: 1120px; }
+        .search-container.sticky-shadow { box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); background-color: var(--container-bg); }
+        
+        /* Ensure sticky behavior works properly */
+        .container { position: relative; }
+        .search-container input[type="text"] { flex-grow: 1; padding: 12px 15px; border: 2px solid var(--search-border); border-radius: 8px; font-size: 1rem; outline: none; transition: border-color 0.3s ease, box-shadow 0.3s ease; background-color: var(--card-bg); color: var(--text-color); }
+        .search-container input[type="text"]:focus { border-color: var(--search-focus-border); box-shadow: 0 0 0 3px var(--search-focus-shadow); }
+        .search-container button { margin-left: 10px; padding: 12px 25px; background: var(--interactive-btn-bg); color: white; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease; }
+        .search-container button:hover { background: var(--interactive-btn-hover); transform: translateY(-1px); }
+        .highlight { background-color: var(--highlight-bg); color: var(--highlight-text); padding: 2px 4px; border-radius: 3px; font-weight: bold; }
+        #backToTopBtn { display: none; position: fixed; bottom: 20px; right: 30px; z-index: 1001; border: none; outline: none; background-color: var(--interactive-btn-bg); color: white; cursor: pointer; padding: 15px; border-radius: 50%; font-size: 18px; width: 50px; height: 50px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); transition: background-color 0.3s, opacity 0.3s, transform 0.3s; }
+        #backToTopBtn:hover { background-color: var(--interactive-btn-hover); transform: translateY(-3px); }
+        .theme-switch-wrapper { position: fixed; bottom: 80px; right: 25px; z-index: 1001; }
+        .theme-switch { display: inline-block; height: 34px; position: relative; width: 60px; }
+        .theme-switch input { display:none; }
+        .slider { background-color: #ccc; bottom: 0; cursor: pointer; left: 0; position: absolute; right: 0; top: 0; transition: .4s; border-radius: 34px; }
+        .slider:before { background-color: #fff; bottom: 4px; content: ""; height: 26px; left: 4px; position: absolute; transition: .4s; width: 26px; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--interactive-btn-bg); }
+        input:checked + .slider:before { transform: translateX(26px); }
+        #searchNav { display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background-color: var(--header-bg-start); color: var(--header-text); padding: 8px 15px; border-radius: 50px; z-index: 1002; box-shadow: 0 5px 15px rgba(0,0,0,0.3); align-items: center; gap: 15px; }
+        #searchNav button { background: var(--interactive-btn-bg); color: white; border: none; border-radius: 50%; width: 35px; height: 35px; font-size: 1.2rem; line-height: 1; cursor: pointer; transition: background-color 0.3s; }
+        #searchNav button:hover { background: var(--interactive-btn-hover); }
+        #searchNavCount { font-weight: bold; font-size: 0.9rem; min-width: 60px; text-align: center; }
+        .current-search-match { outline: 2px solid var(--interactive-btn-hover); animation: pulse-highlight 1.2s infinite; border-radius: 3px; }
+        @keyframes pulse-highlight { 0% { box-shadow: 0 0 0 0 rgba(0, 121, 145, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(0, 121, 145, 0); } 100% { box-shadow: 0 0 0 0 rgba(0, 121, 145, 0); } }
+        .footer { background-color: var(--footer-bg); color: var(--footer-text); text-align: center; padding: 20px; margin-top: 0; font-size: 0.9rem; border-radius: 0 0 10px 10px; }
+        
+        /* --- VISUAL DEMO STYLES --- */
+        .demo-area { text-align: center; }
+        .box-model-diagram { background: var(--card-bg); border: 1px solid var(--card-border); padding: 20px; text-align: center; }
+        .margin { background: rgba(255, 165, 0, 0.3); padding: 20px; }
+        .border { background: rgba(255, 255, 0, 0.4); border: 10px dashed var(--section-h3); padding: 20px; }
+        .padding { background: rgba(144, 238, 144, 0.5); padding: 20px; }
+        .content-box { background: var(--interactive-btn-bg); color: white; padding: 30px; }
+        .box-model-diagram span { display: block; font-weight: bold; }
+        
+        .flex-demo-container, .grid-demo-container { display: flex; background-color: #e0e0e0; padding: 15px; border-radius: 8px; min-height: 150px; transition: all 0.4s ease; align-items: center; }
+        .flex-demo-item, .grid-demo-item { background-color: var(--interactive-btn-bg); color: white; padding: 15px; margin: 5px; border-radius: 4px; text-align: center; flex-grow: 0; flex-shrink: 0; }
+        body.dark-mode .flex-demo-container, body.dark-mode .grid-demo-container { background-color: #101828; }
+        
+        .transform-demo-box { width: 100px; height: 100px; background: var(--interactive-btn-bg); border-radius: 10px; margin: 20px auto; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; transition: transform 0.5s ease-in-out; }
+        
+        .filter-demo-container { text-align: center; }
+        .filter-demo-image { max-width: 80%; border-radius: 8px; transition: filter 0.4s ease; }
+        
+        .responsive-demo { background: var(--card-bg); padding: 15px; border: 2px dashed var(--section-border); overflow: hidden; resize: horizontal; min-width: 300px; max-width: 100%; margin: 0 auto; }
+        .responsive-demo-inner { display: flex; flex-wrap: wrap; gap: 10px; }
+        .responsive-demo-item { background-color: var(--interactive-btn-bg); color: white; padding: 15px; border-radius: 4px; text-align: center; flex-grow: 1; flex-basis: 150px; }
+        .responsive-demo::after { content: 'Resize me! Grab the bottom-right corner.'; font-size: 0.9rem; color: var(--text-color); display: block; text-align: right; margin-top: 10px; opacity: 0.7; }
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🎨 The Definitive CSS Cheatsheet</h1>
+            <p>The ultimate guide to selectors, properties, layouts, and modern techniques</p>
+            <p class="author-credit">by XenoDesigns</p>
+        </header>
+
+        <nav id="tocNav" class="toc-container">
+            <h3>Quick Navigation</h3>
+            <ul><!-- Dynamically Generated --></ul>
+        </nav>
+
+        <div class="search-container" id="searchContainer">
+            <input type="text" id="searchInput" placeholder="Search topics (e.g., flexbox, grid, color)...">
+            <button id="searchButton" class="interactive-btn">Search</button>
+            <button id="clearSearchButton" class="interactive-btn" style="background: #e74c3c;">Clear</button>
+        </div>
+
+        <div class="content">
+
+            <div class="section" data-topic="CSS Fundamentals">
+                <h2>📖 CSS Fundamentals</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h4>What is CSS?</h4>
+                        <p>CSS (Cascading Style Sheets) is the language for styling web pages. It controls the colors, fonts, layout, and overall visual appearance of HTML elements.</p>
+                    </div>
+                     <div class="card">
+                        <h4>Linking CSS</h4>
+                        <p>For organization and performance, always use an **External Stylesheet**. Link it in your HTML's `<head>`. This is the professional standard.</p>
+                        <div class="code-block"><pre><span class="selector"><link <span class="property">rel</span>=<span class="value">"stylesheet"</span> <span class="property">href</span>=<span class="value">"styles.css"</span>></span></pre></div>
+                    </div>
+                </div>
+                <h3>The Cascade, Specificity, and Inheritance</h3>
+                <p>This is the most important concept to understand. It's what the "C" in CSS stands for and it determines which style rule is applied when multiple rules conflict.</p>
+                 <div class="grid">
+                    <div class="card">
+                        <h4>Cascade</h4>
+                        <p>The cascade is the process of combining different stylesheets and resolving conflicts. The browser considers rules in this order: <br>1. **Browser default styles** (e.g., blue links) <br>2. **User agent styles** (user's custom CSS) <br>3. **Author styles** (your CSS file) <br>4. **Inline styles** (e.g., `style="..."`) <br>5. `!important` rules (use with caution!)</p>
+                    </div>
+                    <div class="card">
+                        <h4>Specificity</h4>
+                        <p>When multiple rules target the same element, the most specific one wins. Specificity is calculated like a score:</p>
+                        <ul>
+                            <li><strong>IDs (`#id`):</strong> Most specific</li>
+                            <li><strong>Classes (`.class`), attributes (`[type="..."]`), pseudo-classes (`:hover`):</strong> Medium specificity</li>
+                            <li><strong>Elements (`p`), pseudo-elements (`::before`):</strong> Least specific</li>
+                        </ul>
+                        <div class="code-block"><pre><span class="selector">p#intro</span> <span class="comment">/* More specific than... */</span>
+<span class="selector">p.intro</span> <span class="comment">/* More specific than... */</span>
+<span class="selector">p</span></pre></div>
+                    </div>
+                    <div class="card">
+                        <h4>Inheritance</h4>
+                        <p>Some CSS properties, like `color` and `font-family`, are passed down (inherited) from parent elements to their children. Others, like `border` and `padding`, are not. You can force inheritance with the `inherit` keyword.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" data-topic="Selectors">
+                <h2>🎯 Selectors</h2>
+                <p>Selectors are patterns that target HTML elements. Precision is key. A good developer knows the right selector for the job.</p>
+                <div class="grid">
+                    <div class="card">
+                        <h4>Basic Selectors</h4>
+                        <ul>
+                            <li><strong>Element:</strong> `p`</li>
+                            <li><strong>Class:</strong> `.my-class`</li>
+                            <li><strong>ID:</strong> `#unique-id`</li>
+                            <li><strong>Universal:</strong> `*`</li>
+                            <li><strong>Grouping:</strong> `h1, h2, h3`</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h4>Combinators</h4>
+                        <ul>
+                            <li><strong>Descendant:</strong> `article p`</li>
+                            <li><strong>Direct Child:</strong> `ul > li`</li>
+                            <li><strong>Adjacent Sibling:</strong> `h1 + p`</li>
+                            <li><strong>General Sibling:</strong> `h1 ~ p`</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h4>Pseudo-Classes</h4>
+                        <p>Select elements based on their state or position.</p>
+                        <ul>
+                            <li>`:hover`, `:focus`, `:active`</li>
+                            <li>`:first-child`, `:last-child`</li>
+                            <li>`:nth-child(2n)` (even items)</li>
+                            <li>`:not(.special)` (not having a class)</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h4>Pseudo-Elements & Attributes</h4>
+                        <ul>
+                            <li><strong>Pseudo-Elements:</strong> `::before`, `::after`, `::first-letter`, `::selection`</li>
+                            <li><strong>Attribute:</strong> `a[target="_blank"]`</li>
+                             <li><strong>Attribute Contains:</strong> `a[href*="google"]`</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADDED SECTION: Pseudo-classes and Pseudo-elements -->
+            <div class="section" data-topic="Pseudo-classes and Pseudo-elements">
+                <h2>👻 Pseudo-classes &amp; Pseudo-elements</h2>
+                <p>These powerful selectors allow you to style elements based on their state, position, or even create "virtual" elements that don't exist in the HTML, allowing for incredible creative control without cluttering your markup.</p>
+                <h3>Pseudo-classes (The 'State' Selectors)</h3>
+                <p>Pseudo-classes select an element when it's in a specific state. The selector starts with a single colon (<code>:</code>).</p>
+                <div class="grid">
+                    <div class="card">
+                        <h4>User Action States</h4>
+                        <p>React to what the user is doing. These are essential for any interactive element.</p>
+                        <ul>
+                            <li><code>:hover</code> - When the user's mouse is over the element.</li>
+                            <li><code>:focus</code> - When the element (like an input field) is focused.</li>
+                            <li><code>:active</code> - While the element (like a button) is being clicked.</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h4>Positional &amp; Structural</h4>
+                        <p>Style elements based on their position in the document tree. Perfect for lists and tables.</p>
+                        <ul>
+                            <li><code>:first-child</code> / <code>:last-child</code> - Selects the first or last item in a group of siblings.</li>
+                            <li><code>:nth-child(n)</code> - Selects an item by its position. <code>(2n)</code> for even, <code>(2n+1)</code> for odd, or just <code>(3)</code> for the third item.</li>
+                            <li><code>:only-child</code> - Selects an element if it's the only child of its parent.</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h4>Form States</h4>
+                        <p>Provide instant visual feedback for form validation and interaction.</p>
+                        <ul>
+                            <li><code>:checked</code> - For checked checkboxes or radio buttons.</li>
+                            <li><code>:disabled</code> / <code>:enabled</code> - For interactive elements that are disabled or enabled.</li>
+                            <li><code>:required</code> / <code>:optional</code> - For required/optional form fields.</li>
+                            <li><code>:valid</code> / <code>:invalid</code> - For fields whose content is valid/invalid based on <code>type</code> or <code>pattern</code> attributes.</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h4>Logical Negation</h4>
+                        <p>The <code>:not()</code> pseudo-class lets you select all elements that do <em>not</em> match a certain selector. Incredibly useful for exceptions.</p>
+                        <div class="code-block"><pre><span class="comment">/* Style all buttons except the primary one */</span>
+<span class="selector">button:not(.primary-action)</span> {
+  <span class="property">background-color</span>: <span class="value">grey</span>;
+}
+</pre></div>
+                    </div>
+                </div>
+
+                <h3>Pseudo-elements (The 'Virtual' Selectors)</h3>
+                <p>Pseudo-elements let you style a specific <em>part</em> of a selected element. They act like adding an extra element without touching the HTML. The selector starts with a double colon (<code>::</code>).</p>
+                <div class="grid">
+                    <div class="card">
+                        <h4><code>::before</code> &amp; <code>::after</code> (The Workhorses)</h4>
+                        <p>These create a virtual first child and last child inside the selected element. They <strong>must</strong> have a <code>content</code> property to work. They are used for tooltips, custom list bullets, decorative shapes, and more.</p>
+                        <div class="code-block"><pre><span class="comment">/* Add quotation marks around a blockquote */</span>
+<span class="selector">blockquote::before</span> {
+  <span class="property">content</span>: <span class="value">'"'</span>;
+  <span class="property">font-size</span>: <span class="value">2em</span>;
+}
+<span class="selector">blockquote::after</span> {
+  <span class="property">content</span>: <span class="value">'"'</span>;
+  <span class="property">font-size</span>: <span class="value">2em</span>;
+}</pre></div>
+                    </div>
+                    <div class="card">
+                        <h4>Typographic Control</h4>
+                        <p>Style specific parts of the text content within an element.</p>
+                        <ul>
+                            <li><code>::first-letter</code> - Style the very first letter (e.g., for a "drop cap" effect).</li>
+                            <li><code>::first-line</code> - Style the first line of text in a block-level element.</li>
+                            <li><code>::selection</code> - Style the part of the document that has been highlighted by the user.</li>
+                            <li><code>::placeholder</code> - Style the placeholder text in an <code>&lt;input&gt;</code> or <code>&lt;textarea&gt;</code>.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- END ADDED SECTION -->
+
+            <div class="section" data-topic="Colors and Units">
+                 <h2>🎨 Colors & Units</h2>
+                <p>Choosing the right units and color formats is fundamental for creating scalable and maintainable designs.</p>
+                <div class="grid">
+                    <div class="card">
+                        <h4>Color Formats</h4>
+                        <ul>
+                            <li><strong>Hex:</strong> `#007991` (most common)</li>
+                            <li><strong>RGB:</strong> `rgb(0, 121, 145)`</li>
+                            <li><strong>RGBA:</strong> `rgba(0, 121, 145, 0.8)` (includes alpha/transparency)</li>
+                            <li><strong>HSL:</strong> `hsl(191, 100%, 28%)` (Hue, Saturation, Lightness - very intuitive)</li>
+                            <li><strong>Keywords:</strong> `red`, `blue`, `transparent`</li>
+                        </ul>
+                    </div>
+                     <div class="card">
+                        <h4>Absolute Units</h4>
+                        <p>Fixed values. Best for things you want to remain a constant size.</p>
+                        <ul>
+                            <li>`px`: Pixels. The most common absolute unit.</li>
+                        </ul>
+                         <h4>Relative Units (✅ Modern Practice)</h4>
+                        <p>Scale relative to another value. Essential for responsive design.</p>
+                        <ul>
+                            <li>`rem`: Relative to the root `<html>` font size. **Excellent for scalability and accessibility.**</li>
+                             <li>`em`: Relative to the parent element's font size.</li>
+                             <li>`%`: Relative to the parent element's size.</li>
+                             <li>`vw`, `vh`: 1% of the viewport's width or height.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section" data-topic="Typography">
+                <h2>📝 Typography</h2>
+                <p>Styling text is one of the most important parts of web design. Good typography makes your site readable and beautiful.</p>
+                <div class="grid">
+                    <div class="card">
+                        <h4>Font Family</h4>
+                        <p>Always provide fallback fonts in case the user's system doesn't have the primary one.</p>
+                        <div class="code-block"><pre><span class="selector">body</span> {
+  <span class="property">font-family</span>: <span class="value">"Poppins", "Helvetica Neue", sans-serif</span>;
+}</pre></div>
+                    </div>
+                    <div class="card">
+                        <h4>Size & Weight</h4>
+                        <p>Use `rem` for `font-size` to respect user's browser settings. `font-weight` can be a number (100-900) or keyword.</p>
+                        <div class="code-block"><pre><span class="selector">h1</span> {
+  <span class="property">font-size</span>: <span class="value">2.5rem</span>;
+  <span class="property">font-weight</span>: <span class="value">bold</span>; <span class="comment">/* or 700 */</span>
+}</pre></div>
+                    </div>
+                    <div class="card">
+                        <h4>Line Height & Spacing</h4>
+                        <p>Use a unitless value for `line-height` for better scaling. `letter-spacing` and `word-spacing` control micro-typography.</p>
+                        <div class="code-block"><pre><span class="selector">p</span> {
+  <span class="property">line-height</span>: <span class="value">1.6</span>; <span class="comment">/* 1.6 times the font size */</span>
+  <span class="property">letter-spacing</span>: <span class="value">0.5px</span>;
+}</pre></div>
+                    </div>
+                    <div class="card">
+                        <h4>Text Alignment & Decoration</h4>
+                        <p>Control the horizontal alignment and add decorative lines.</p>
+                        <div class="code-block"><pre><span class="selector">.title</span> { <span class="property">text-align</span>: <span class="value">center</span>; }
+<span class="selector">a</span> { <span class="property">text-decoration</span>: <span class="value">none</span>; }
+<span class="selector">.uppercase</span> { <span class="property">text-transform</span>: <span class="value">uppercase</span>; }</pre></div>
+                    </div>
+                </div>
+                <h3>Interactive Typography Playground</h3>
+            <p>Experiment with font size, weight, line height, and spacing. See how your choices affect the text below in real time!</p>
+            <div class="example" style="max-width: 500px;">
+                <div class="demo-area" style="display: flex; flex-wrap: wrap; gap: 1em;">
+                    <label>
+                        Font Size:
+                        <input type="range" id="typoFontSize" min="1" max="4" step="0.1" value="1.2" style="vertical-align: middle;">
+                        <span id="typoFontSizeVal">1.2rem</span>
+                    </label>
+                    <label>
+                        Font Weight:
+                        <select id="typoFontWeight">
+                            <option value="400">Normal</option>
+                            <option value="700">Bold</option>
+                            <option value="300">Light</option>
+                            <option value="900">Black</option>
+                        </select>
+                    </label>
+                    <label>
+                        Line Height:
+                        <input type="range" id="typoLineHeight" min="1" max="2.5" step="0.1" value="1.6" style="vertical-align: middle;">
+                        <span id="typoLineHeightVal">1.6</span>
+                    </label>
+                    <label>
+                        Letter Spacing:
+                        <input type="range" id="typoLetterSpacing" min="0" max="5" step="0.1" value="0.5" style="vertical-align: middle;">
+                        <span id="typoLetterSpacingVal">0.5px</span>
+                    </label>
+                </div>
+                <div id="typoDemoText" style="margin-top: 1.5em; padding: 1em; background: var(--section-bg); border-radius: 8px; border: 1px solid var(--section-border); font-size: 1.2rem; font-weight: 400; line-height: 1.6; letter-spacing: 0.5px;">
+                    The quick brown fox jumps over the lazy dog.
+                </div>
+            </div>
+            <script>
+                // Interactive Typography Demo
+                const typoFontSize = document.getElementById('typoFontSize');
+                const typoFontWeight = document.getElementById('typoFontWeight');
+                const typoLineHeight = document.getElementById('typoLineHeight');
+                const typoLetterSpacing = document.getElementById('typoLetterSpacing');
+                const typoDemoText = document.getElementById('typoDemoText');
+                const typoFontSizeVal = document.getElementById('typoFontSizeVal');
+                const typoLineHeightVal = document.getElementById('typoLineHeightVal');
+                const typoLetterSpacingVal = document.getElementById('typoLetterSpacingVal');
+
+                function updateTypographyDemo() {
+                    typoDemoText.style.fontSize = typoFontSize.value + 'rem';
+                    typoDemoText.style.fontWeight = typoFontWeight.value;
+                    typoDemoText.style.lineHeight = typoLineHeight.value;
+                    typoDemoText.style.letterSpacing = typoLetterSpacing.value + 'px';
+                    typoFontSizeVal.textContent = typoFontSize.value + 'rem';
+                    typoLineHeightVal.textContent = typoLineHeight.value;
+                    typoLetterSpacingVal.textContent = typoLetterSpacing.value + 'px';
+                }
+                typoFontSize.addEventListener('input', updateTypographyDemo);
+                typoFontWeight.addEventListener('change', updateTypographyDemo);
+                typoLineHeight.addEventListener('input', updateTypographyDemo);
+                typoLetterSpacing.addEventListener('input', updateTypographyDemo);
+            </script>
+
+            <h3>Typography Alignment & Transformation Demo</h3>
+            <div class="example" style="max-width: 500px;">
+                <div class="demo-area" style="display: flex; flex-wrap: wrap; gap: 1em;">
+                    <label>
+                        Text Align:
+                        <select id="typoTextAlign">
+                            <option value="left">Left</option>
+                            <option value="center">Center</option>
+                            <option value="right">Right</option>
+                            <option value="justify">Justify</option>
+                        </select>
+                    </label>
+                    <label>
+                        Text Transform:
+                        <select id="typoTextTransform">
+                            <option value="none">None</option>
+                            <option value="uppercase">Uppercase</option>
+                            <option value="lowercase">Lowercase</option>
+                            <option value="capitalize">Capitalize</option>
+                        </select>
+                    </label>
+                    <label>
+                        Text Decoration:
+                        <select id="typoTextDecoration">
+                            <option value="none">None</option>
+                            <option value="underline">Underline</option>
+                            <option value="line-through">Line-through</option>
+                            <option value="overline">Overline</option>
+                        </select>
+                    </label>
+                </div>
+                <div id="typoAlignDemoText" style="margin-top: 1.5em; padding: 1em; background: var(--section-bg); border-radius: 8px; border: 1px solid var(--section-border); text-align: left; text-transform: none; text-decoration: none;">
+                    CSS makes text <strong>beautiful</strong> and <em>readable</em>!
+                </div>
+            </div>
+            <script>
+                // Typography Alignment Demo
+                const typoTextAlign = document.getElementById('typoTextAlign');
+                const typoTextTransform = document.getElementById('typoTextTransform');
+                const typoTextDecoration = document.getElementById('typoTextDecoration');
+                const typoAlignDemoText = document.getElementById('typoAlignDemoText');
+
+                function updateTypographyAlignDemo() {
+                    typoAlignDemoText.style.textAlign = typoTextAlign.value;
+                    typoAlignDemoText.style.textTransform = typoTextTransform.value;
+                    typoAlignDemoText.style.textDecoration = typoTextDecoration.value;
+                }
+                typoTextAlign.addEventListener('change', updateTypographyAlignDemo);
+                typoTextTransform.addEventListener('change', updateTypographyAlignDemo);
+                typoTextDecoration.addEventListener('change', updateTypographyAlignDemo);
+            </script>
+
+            </div>
+
+            <div class="section" data-topic="The Box Model">
+                <h2>📦 The Box Model</h2>
+                <p>Every element in HTML is a rectangular box. The CSS box model describes how the space of this box is composed: content, padding, border, and margin.</p>
+                <div class="box-model-diagram">
+                    <div class="margin">
+                        <span>Margin</span>
+                        <div class="border">
+                             <span>Border</span>
+                            <div class="padding">
+                                <span>Padding</span>
+                                <div class="content-box">
+                                    Content
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 <div class="code-block"><pre><span class="selector">.my-box</span> {
+  <span class="property">width</span>: <span class="value">300px</span>; <span class="comment">/* Width of the content area */</span>
+  <span class="property">padding</span>: <span class="value">20px</span>; <span class="comment">/* Space between content and border */</span>
+  <span class="property">border</span>: <span class="value">5px solid black</span>; <span class="comment">/* The visible border */</span>
+  <span class="property">margin</span>: <span class="value">25px</span>; <span class="comment">/* Space outside the border, separating from other elements */</span>
+
+  <span class="comment">/* ✅ This is a life-saver! It makes 'width' include padding and border. */</span>
+  <span class="property">box-sizing</span>: <span class="value">border-box</span>;
+}</pre></div>
+            </div>
+
+            <div class="section" data-topic="CSS Units Explained">
+                <h2>📏 CSS Units: px, em, rem, %, vw, vh, and More</h2>
+                <p>CSS offers a variety of units for sizing and spacing. Choosing the right one is key to building responsive, accessible layouts.</p>
+                <table style="width:100%; border-collapse: collapse; margin-bottom: 1.5em;">
+                    <thead>
+                        <tr style="background: var(--table-header-bg);">
+                            <th style="border: 1px solid var(--table-border); padding: 0.5em;">Unit</th>
+                            <th style="border: 1px solid var(--table-border); padding: 0.5em;">Description</th>
+                            <th style="border: 1px solid var(--table-border); padding: 0.5em;">Best Use Cases</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid var(--table-border); padding: 0.5em;"><code>px</code></td>
+                            <td style="border: 1px solid var(--table-border); padding: 0.5em;">Pixels. Fixed, absolute size. Not affected by parent or root font size.</td>
+                            <td style="border: 1px solid var(--table-border); padding: 0.5em;">Borders, fine details, when exact control is needed.</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid var(--table-border); padding: 0.5em;"><code>em</code></td>
+                            <td style="border: 1px solid var(--table-border); padding: 0.5em;">Relative to the <strong>font-size of the element</strong>. 2em = 2 × current font size.</td>
+                            <td style="border: 1px solid var(--table-border); padding: 0.5em;">Padding, margin, spacing that should scale with text size.</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid var(--table-border); padding: 0.5em;"><code>rem</code></td>
+                            <td style="border: 1px solid var(--table-border); padding: 0.5em;">Relative to the <strong>root element's font-size</strong> (usually <code>&lt;html&gt;</code>).</td>
+                            <td style="border: 1px solid var(--table-border); padding: 0.5em;">Font sizes, consistent spacing across components.</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid var(--table-border); padding: 0.5em;"><code>%</code></td>
+                            <td style="border: 1px solid var(--table-border); padding: 0.5em;">Percentage of the parent element's size (width, sometimes height).</td>
+                            <td style="border: 1px solid var(--table-border); padding: 0.5em;">Fluid layouts, images, containers that scale with parent.</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid var(--table-border); padding: 0.5em;"><code>vw</code>, <code>vh</code></td>
+                            <td style="border: 1px solid var(--table-border); padding: 0.5em;">Viewport width/height. <code>1vw</code> = 1% of viewport width.</td>
+                            <td style="border: 1px solid var(--table-border); padding: 0.5em;">Full-screen sections, hero banners, responsive typography.</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid var(--table-border); padding: 0.5em;"><code>fr</code></td>
+                            <td style="border: 1px solid var(--table-border); padding: 0.5em;">Fractional unit for CSS Grid. Divides available space.</td>
+                            <td style="border: 1px solid var(--table-border); padding: 0.5em;">Grid layouts (columns/rows).</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid var(--table-border); padding: 0.5em;"><code>ch</code>, <code>ex</code></td>
+                            <td style="border: 1px solid var(--table-border); padding: 0.5em;">Width of "0" (ch) or x-height (ex) of current font.</td>
+                            <td style="border: 1px solid var(--table-border); padding: 0.5em;">Monospaced layouts, input widths.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h3>Unit Comparison Playground</h3>
+                <p>Adjust the controls to see how different units behave. Resize your browser window to see the effect of viewport units!</p>
+                <div class="example" style="max-width: 600px;">
+                    <div class="demo-area" style="display: flex; flex-wrap: wrap; gap: 1em;">
+                        <label>
+                            Unit:
+                            <select id="unitDemoUnit">
+                                <option value="px">px</option>
+                                <option value="em">em</option>
+                                <option value="rem">rem</option>
+                                <option value="%">%</option>
+                                <option value="vw">vw</option>
+                                <option value="vh">vh</option>
+                            </select>
+                        </label>
+                        <label>
+                            Value:
+                            <input type="range" id="unitDemoValue" min="10" max="200" value="48">
+                            <span id="unitDemoValueLabel">48</span>
+                        </label>
+                        <label>
+                            Parent Font Size (for em/%):
+                            <input type="range" id="unitDemoParentFont" min="12" max="48" value="16">
+                            <span id="unitDemoParentFontLabel">16px</span>
+                        </label>
+                    </div>
+                    <div id="unitDemoParent" style="margin-top: 1.5em; padding: 1em; background: var(--section-bg); border-radius: 8px; border: 1px solid var(--section-border); font-size: 16px;">
+                        <span id="unitDemoBox" style="display: inline-block; background: #b2dfdb; color: #004d40; border-radius: 4px; text-align: center; vertical-align: middle; line-height: 1; padding: 0.5em;">
+                            Sizing Box
+                        </span>
+                        <span id="unitDemoInfo" style="margin-left: 1em; color: var(--text-color); font-size: 0.95em;"></span>
+                    </div>
+                </div>
+                <script>
+                    // Unit Comparison Playground
+                    const unitDemoUnit = document.getElementById('unitDemoUnit');
+                    const unitDemoValue = document.getElementById('unitDemoValue');
+                    const unitDemoValueLabel = document.getElementById('unitDemoValueLabel');
+                    const unitDemoParentFont = document.getElementById('unitDemoParentFont');
+                    const unitDemoParentFontLabel = document.getElementById('unitDemoParentFontLabel');
+                    const unitDemoParent = document.getElementById('unitDemoParent');
+                    const unitDemoBox = document.getElementById('unitDemoBox');
+                    const unitDemoInfo = document.getElementById('unitDemoInfo');
+
+                    function updateUnitDemo() {
+                        const unit = unitDemoUnit.value;
+                        const value = unitDemoValue.value;
+                        const parentFont = unitDemoParentFont.value;
+                        unitDemoValueLabel.textContent = value;
+                        unitDemoParentFontLabel.textContent = parentFont + 'px';
+                        unitDemoParent.style.fontSize = parentFont + 'px';
+
+                        let boxSize, info = '';
+                        if (unit === 'px') {
+                            boxSize = value + 'px';
+                            info = `Box is always ${value}px wide, regardless of parent or viewport.`;
+                        } else if (unit === 'em') {
+                            boxSize = (value / 16) + 'em';
+                            info = `Box width = ${value / 16}em = ${((value / 16) * parentFont).toFixed(1)}px (scales with parent font size).`;
+                        } else if (unit === 'rem') {
+                            boxSize = (value / 16) + 'rem';
+                            info = `Box width = ${value / 16}rem = ${((value / 16) * parseFloat(getComputedStyle(document.documentElement).fontSize)).toFixed(1)}px (scales with root font size).`;
+                        } else if (unit === '%') {
+                            boxSize = value + '%';
+                            info = `Box width = ${value}% of parent container.`;
+                        } else if (unit === 'vw') {
+                            boxSize = value + 'vw';
+                            info = `Box width = ${value}% of viewport width.`;
+                        } else if (unit === 'vh') {
+                            boxSize = value + 'vh';
+                            info = `Box width = ${value}% of viewport height.`;
+                        }
+                        unitDemoBox.style.width = boxSize;
+                        unitDemoBox.style.minWidth = '2em';
+                        unitDemoBox.style.height = '2em';
+                        unitDemoInfo.textContent = info;
+                    }
+                    unitDemoUnit.addEventListener('change', updateUnitDemo);
+                    unitDemoValue.addEventListener('input', updateUnitDemo);
+                    unitDemoParentFont.addEventListener('input', updateUnitDemo);
+                    window.addEventListener('resize', updateUnitDemo);
+                    updateUnitDemo();
+                </script>
+
+                <h3>Summary: When to Use Each Unit</h3>
+                <ul>
+                    <li><strong>px</strong>: For borders, icons, and when you need exact, fixed sizing.</li>
+                    <li><strong>em</strong>: For spacing that should scale with the element's font size (e.g., button padding).</li>
+                    <li><strong>rem</strong>: For consistent font sizes and spacing across your site, respecting user preferences.</li>
+                    <li><strong>%</strong>: For fluid layouts that scale with their parent container.</li>
+                    <li><strong>vw/vh</strong>: For full-screen sections, hero images, or responsive typography that adapts to the viewport.</li>
+                    <li><strong>fr</strong>: For dividing space in CSS Grid layouts.</li>
+                </ul>
+                <p><strong>Tip:</strong> Use <code>rem</code> for most font sizes and layout spacing for accessibility and consistency. Use <code>em</code> for component-internal spacing. Use <code>px</code> only when you need pixel-perfect control.</p>
+            </div>
+
+            </div>
+
+            <div class="section" data-topic="Layout: Flexbox">
+                <h2>🚀 Layout: Flexbox</h2>
+                <p>Flexbox is a one-dimensional layout model perfect for distributing space among items in an interface. It excels at aligning items and is essential for modern web development.</p>
+                <h3>Interactive Flexbox Demo</h3>
+                <div class="example">
+                    <div id="flexDemoContainer" class="flex-demo-container">
+                        <div class="flex-demo-item">1</div>
+                        <div class="flex-demo-item" style="height: 80px;">2</div>
+                        <div class="flex-demo-item">3</div>
+                    </div>
+                    <div class="demo-area">
+                        <strong>Justify Content:</strong><br>
+                        <button class="interactive-btn" onclick="updateFlexDemo('justifyContent', 'flex-start')">flex-start</button>
+                        <button class="interactive-btn" onclick="updateFlexDemo('justifyContent', 'center')">center</button>
+                        <button class="interactive-btn" onclick="updateFlexDemo('justifyContent', 'flex-end')">flex-end</button>
+                        <button class="interactive-btn" onclick="updateFlexDemo('justifyContent', 'space-between')">space-between</button>
+                        <button class="interactive-btn" onclick="updateFlexDemo('justifyContent', 'space-around')">space-around</button>
+                    </div>
+                     <div class="demo-area">
+                        <strong>Align Items:</strong><br>
+                        <button class="interactive-btn" onclick="updateFlexDemo('alignItems', 'flex-start')">flex-start</button>
+                        <button class="interactive-btn" onclick="updateFlexDemo('alignItems', 'center')">center</button>
+                        <button class="interactive-btn" onclick="updateFlexDemo('alignItems', 'flex-end')">flex-end</button>
+                    </div>
+                    <div id="flexDemoOutput" class="output">.container { display: flex; align-items: center; }</div>
+                </div>
+            </div>
+            
+            <div class="section" data-topic="Layout: Grid">
+                <h2>🌐 Layout: Grid</h2>
+                <p>CSS Grid is a powerful two-dimensional layout system that lets you control the rows and columns of your layout simultaneously. It's perfect for complex page layouts.</p>
+                <h3>Interactive Grid Demo</h3>
+                <div class="example">
+                    <div id="gridDemoContainer" class="grid-demo-container" style="display: grid;">
+                        <div class="grid-demo-item">1</div>
+                        <div class="grid-demo-item">2</div>
+                        <div class="grid-demo-item">3</div>
+                        <div class="grid-demo-item">4</div>
+                        <div class="grid-demo-item">5</div>
+                        <div class="grid-demo-item">6</div>
+                    </div>
+                     <div class="demo-area">
+                        <strong>Grid Template Columns:</strong><br>
+                        <button class="interactive-btn" onclick="updateGridDemo('gridTemplateColumns', '1fr 1fr 1fr')">1fr 1fr 1fr</button>
+                        <button class="interactive-btn" onclick="updateGridDemo('gridTemplateColumns', 'repeat(auto-fit, minmax(100px, 1fr))')">auto-fit</button>
+                        <button class="interactive-btn" onclick="updateGridDemo('gridTemplateColumns', '2fr 1fr')">2fr 1fr</button>
+                        <button class="interactive-btn" onclick="updateGridDemo('gridTemplateColumns', 'repeat(3, 100px)')">repeat(3, 100px)</button>
+                        <button class="interactive-btn" onclick="updateGridDemo('gridTemplateColumns', 'repeat(auto-fill, minmax(100px, 1fr))')">auto-fill</button>
+                        <button class="interactive-btn" onclick="updateGridDemo('gridTemplateColumns', 'repeat(3, 1fr)')">repeat(3, 1fr)</button>
+                    </div>
+                    <div id="gridDemoOutput" class="output">.container { display: grid; }</div>
+                </div>
+            </div>
+
+            <div class="section" data-topic="Positioning">
+                <h2>📌 Positioning</h2>
+                <p>The `position` property specifies how an element is positioned. It can remove elements from the normal document flow to create overlays, sticky headers, and more.</p>
+                 <div class="grid">
+                    <div class="card">
+                        <h4>`static` (default)</h4>
+                        <p>The element exists in the normal document flow.</p>
+                    </div>
+                    <div class="card">
+                        <h4>`relative`</h4>
+                        <p>The element's box is offset from its original position. The space it would have occupied is preserved.</p>
+                    </div>
+                     <div class="card">
+                        <h4>`absolute`</h4>
+                        <p>The element is removed from the flow and positioned relative to its nearest *positioned* ancestor. Essential for tooltips and modals.</p>
+                    </div>
+                     <div class="card">
+                        <h4>`fixed`</h4>
+                        <p>The element is positioned relative to the browser window. It won't move when the page is scrolled. Perfect for a static header or footer.</p>
+                    </div>
+                     <div class="card">
+                        <h4>`sticky`</h4>
+                        <p>A hybrid of `relative` and `fixed`. The element scrolls normally until it hits a specified offset (e.g., `top: 0`), at which point it "sticks" in place. This search bar is an example!</p>
+                    </div>
+                </div>
+            </div>
+
+            
+
+            <div class="section" data-topic="Transforms, Transitions, and Animations">
+                <h2>✨ Transforms, Transitions & Animations</h2>
+                <p>Bring your website to life by moving, changing, and animating elements. These properties are highly performant and should be used instead of animating properties like `width` or `margin`.</p>
+                <h3>2D Transforms</h3>
+                <p>The `transform` property lets you modify the coordinate space of an element to move, rotate, scale, or skew it.</p>
+                <div class="example">
+                    <h4>Transform Demo</h4>
+                    <div class="transform-demo-box" id="transformDemoBox" style="display: flex; align-items: center; justify-content: center; text-align: center;">Transform Me</div>
+                    <div class="demo-area">
+                        <button class="interactive-btn" onclick="applyTransform('translateX(50px)')">Translate X</button>
+                        <button class="interactive-btn" onclick="applyTransform('translateY(50px)')">Translate Y</button>
+                        <button class="interactive-btn" onclick="applyTransform('translate(50px, 50px)')">Translate</button>
+                        <button class="interactive-btn" onclick="applyTransform('translateX(-50px)')">Translate X Negative</button>
+                        <button class="interactive-btn" onclick="applyTransform('translateY(-50px)')">Translate Y Negative</button>
+                        <button class="interactive-btn" onclick="applyTransform('translate(-50px, -50px)')">Translate Negative</button>
+                        <button class="interactive-btn" onclick="applyTransform('rotate(45deg)')">Rotate</button>
+                        <button class="interactive-btn" onclick="applyTransform('rotateX(45deg)')">Rotate X</button>
+                        <button class="interactive-btn" onclick="applyTransform('rotateY(45deg)')">Rotate Y</button>
+                        <button class="interactive-btn" onclick="applyTransform('rotateZ(45deg)')">Rotate Z</button>
+                        <button class="interactive-btn" onclick="applyTransform('scale(1.5)')">Scale Up</button>
+                        <button class="interactive-btn" onclick="applyTransform('scale(0.5)')">Scale Down</button>
+                        <button class="interactive-btn" onclick="applyTransform('scaleX(1.5)')">Scale X</button>    
+                        <button class="interactive-btn" onclick="applyTransform('scaleY(1.5)')">Scale Y</button>
+                        <button class="interactive-btn" onclick="applyTransform('skewX(20deg)')">Skew X</button>
+                        <button class="interactive-btn" onclick="applyTransform('skewY(20deg)')">Skew Y</button>
+                        <button class="interactive-btn" onclick="applyTransform('none')">Reset</button>
+                    </div>
+                </div>
+                <h3>Transitions</h3>
+                <p>Transitions provide a way to smoothly animate changes to CSS properties over a given duration. They are perfect for interactive feedback, like on hover.</p>
+                <div class="code-block"><pre><span class="selector">.my-button</span> {
+  <span class="property">background-color</span>: <span class="value">#007991</span>;
+  <span class="property">transform</span>: <span class="value">scale(1)</span>;
+  <span class="comment">/* property | duration | timing-function | delay */</span>
+  <span class="property">transition</span>: <span class="value">background-color 0.3s ease-out, transform 0.3s ease-out</span>;
+}
+
+<span class="selector">.my-button:hover</span> {
+  <span class="property">background-color</span>: <span class="value">#004d40</span>;
+  <span class="property">transform</span>: <span class="value">scale(1.1)</span>; <span class="comment">/* Grows slightly on hover */</span>
+}</pre></div>
+                <!-- INSERT_YOUR_CODE -->
+                <h3>Interactive Transition & Pseudo-Class Demo</h3>
+                <p>Try hovering and focusing the buttons and boxes below to see transitions and pseudo-class effects in action!</p>
+                <div class="example" style="display: flex; flex-wrap: wrap; gap: 2em; align-items: flex-start;">
+                    <div>
+                        <h4>Button Hover & Focus</h4>
+                        <button class="transition-demo-btn">Hover or Focus Me</button>
+                        <div style="margin-top: 0.5em; font-size: 0.95em; color: #555;">
+                            <span class="tag">:hover</span> and <span class="tag">:focus</span> change color and scale with a transition.
+                        </div>
+                        <div class="code-block" style="margin-top: 0.5em;"><pre><span class="selector">.transition-demo-btn</span> {
+  <span class="property">background</span>: <span class="value">#007991</span>;
+  <span class="property">color</span>: <span class="value">white</span>;
+  <span class="property">border</span>: <span class="value">none</span>;
+  <span class="property">padding</span>: <span class="value">0.7em 1.5em</span>;
+  <span class="property">border-radius</span>: <span class="value">6px</span>;
+  <span class="property">font-size</span>: <span class="value">1.1rem</span>;
+  <span class="property">transition</span>: <span class="value">background 0.3s, transform 0.2s</span>;
+}
+<span class="selector">.transition-demo-btn:hover, .transition-demo-btn:focus</span> {
+  <span class="property">background</span>: <span class="value">#004d40</span>;
+  <span class="property">transform</span>: <span class="value">scale(1.08)</span>;
+  <span class="property">outline</span>: <span class="value">2px solid #ffeb3b</span>;
+}</pre></div>
+                    </div>
+                    <div>
+                        <h4>Box <span class="tag">:hover</span> & <span class="tag">:active</span></h4>
+                        <div class="transition-demo-box" tabindex="0" style="margin-bottom: 0.5em;">Hover or Click Me</div>
+                        <div style="font-size: 0.95em; color: #555;">
+                            <span class="tag">:hover</span> changes shadow, <span class="tag">:active</span> shrinks the box.
+                        </div>
+                        <div class="code-block" style="margin-top: 0.5em;"><pre><span class="selector">.transition-demo-box</span> {
+  <span class="property">background</span>: <span class="value">#f8f9fa</span>;
+  <span class="property">border</span>: <span class="value">2px solid #007991</span>;
+  <span class="property">border-radius</span>: <span class="value">8px</span>;
+  <span class="property">padding</span>: <span class="value">1.2em 2em</span>;
+  <span class="property">font-size</span>: <span class="value">1.1rem</span>;
+  <span class="property">box-shadow</span>: <span class="value">0 2px 8px rgba(0,0,0,0.08)</span>;
+  <span class="property">transition</span>: <span class="value">box-shadow 0.3s, transform 0.15s</span>;
+  <span class="property">cursor</span>: <span class="value">pointer</span>;
+  <span class="property">outline</span>: <span class="value">none</span>;
+}
+<span class="selector">.transition-demo-box:hover, .transition-demo-box:focus</span> {
+  <span class="property">box-shadow</span>: <span class="value">0 6px 24px rgba(0,121,145,0.18)</span>;
+}
+<span class="selector">.transition-demo-box:active</span> {
+  <span class="property">transform</span>: <span class="value">scale(0.96)</span>;
+}</pre></div>
+                    </div>
+                </div>
+                <style>
+                    .transition-demo-btn {
+                        background: #007991;
+                        color: white;
+                        border: none;
+                        padding: 0.7em 1.5em;
+                        border-radius: 6px;
+                        font-size: 1.1rem;
+                        transition: background 0.3s, transform 0.2s;
+                        cursor: pointer;
+                    }
+                    .transition-demo-btn:hover,
+                    .transition-demo-btn:focus {
+                        background: #004d40;
+                        transform: scale(1.08);
+                        outline: 2px solid #ffeb3b;
+                    }
+                    .transition-demo-box {
+                        background: #f8f9fa;
+                        border: 2px solid #007991;
+                        border-radius: 8px;
+                        padding: 1.2em 2em;
+                        font-size: 1.1rem;
+                        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                        transition: box-shadow 0.3s, transform 0.15s;
+                        cursor: pointer;
+                        outline: none;
+                        display: inline-block;
+                        user-select: none;
+                    }
+                    .transition-demo-box:hover,
+                    .transition-demo-box:focus {
+                        box-shadow: 0 6px 24px rgba(0,121,145,0.18);
+                    }
+                    .transition-demo-box:active {
+                        transform: scale(0.96);
+                    }
+                </style>
+
+                <h3>Live Keyframes Animation Example</h3>
+                <p>Click the button to trigger a keyframes animation on the box below!</p>
+                <div class="example" style="display: flex; flex-direction: column; gap: 1em; align-items: flex-start;">
+                    <button class="interactive-btn" onclick="triggerKeyframeAnimation()">Animate!</button>
+                    <div id="keyframeDemoBox" class="keyframe-demo-box">Watch Me Animate</div>
+                    <div class="code-block" style="margin-top: 0.5em;"><pre><span class="keyword">@keyframes</span> <span class="value">bounceIn</span> {
+  <span class="value">0%</span> {
+    <span class="property">transform</span>: <span class="value">scale(0.5)</span>;
+    <span class="property">opacity</span>: <span class="value">0.2</span>;
+  }
+  <span class="value">60%</span> {
+    <span class="property">transform</span>: <span class="value">scale(1.2)</span>;
+    <span class="property">opacity</span>: <span class="value">1</span>;
+  }
+  <span class="value">100%</span> {
+    <span class="property">transform</span>: <span class="value">scale(1)</span>;
+  }
+}
+<span class="selector">.keyframe-demo-box.bounce</span> {
+  <span class="property">animation</span>: <span class="value">bounceIn 0.7s cubic-bezier(.68,-0.55,.27,1.55)</span>;
+}</pre></div>
+                </div>
+                <style>
+                    .keyframe-demo-box {
+                        background: linear-gradient(90deg, #007991 0%, #78ffd6 100%);
+                        color: #fff;
+                        border-radius: 8px;
+                        padding: 1.2em 2em;
+                        font-size: 1.1rem;
+                        box-shadow: 0 4px 16px rgba(0,121,145,0.13);
+                        margin-top: 0.5em;
+                        display: inline-block;
+                        min-width: 160px;
+                        text-align: center;
+                        transition: box-shadow 0.3s;
+                    }
+                    @keyframes bounceIn {
+                        0% {
+                            transform: scale(0.5);
+                            opacity: 0.2;
+                        }
+                        60% {
+                            transform: scale(1.2);
+                            opacity: 1;
+                        }
+                        100% {
+                            transform: scale(1);
+                        }
+                    }
+                    .keyframe-demo-box.bounce {
+                        animation: bounceIn 0.7s cubic-bezier(.68,-0.55,.27,1.55);
+                    }
+                </style>
+                <script>
+                    function triggerKeyframeAnimation() {
+                        const box = document.getElementById('keyframeDemoBox');
+                        box.classList.remove('bounce');
+                        // Force reflow to restart animation
+                        void box.offsetWidth;
+                        box.classList.add('bounce');
+                    }
+                </script>
+
+                <h3>Animations with `@keyframes`</h3>
+                <p>For more complex, multi-step animations, use `@keyframes` to define the stages ("waypoints") of the animation.</p>
+                <div class="code-block"><pre><span class="keyword">@keyframes</span> <span class="value">fadeInUp</span> {
+  <span class="value">0%</span> {
+    <span class="property">opacity</span>: <span class="value">0</span>;
+    <span class="property">transform</span>: <span class="value">translateY(20px)</span>;
+  }
+  <span class="value">100%</span> {
+    <span class="property">opacity</span>: <span class="value">1</span>;
+    <span class="property">transform</span>: <span class="value">translateY(0)</span>;
+  }
+}
+<span class="selector">.my-element</span> {
+  <span class="property">animation</span>: <span class="value">fadeInUp 1s ease-out forwards</span>;
+}</pre></div>
+            </div>
+            
+            <div class="section" data-topic="Advanced Techniques">
+                <h2>🛠️ Advanced Techniques & Effects</h2>
+                <p>Go beyond the basics with modern CSS features that allow for powerful theming and stunning visual effects.</p>
+                <div class="grid">
+                    <div class="card">
+                        <h4>CSS Variables</h4>
+                        <p>Also known as Custom Properties. Define a value once and reuse it everywhere. Incredible for theming and clean code. This entire page uses them for its light/dark modes!</p>
+                        <div class="code-block"><pre><span class="selector">:root</span> {
+  <span class="property">--primary-color</span>: <span class="value">#007991</span>;
+}
+<span class="selector">.button</span> {
+  <span class="property">background-color</span>: <span class="value">var(--primary-color)</span>;
+}</pre></div>
+                    </div>
+                    <div class="card">
+                        <h4>Shadows: `box-shadow` & `text-shadow`</h4>
+                        <p>Add depth to your elements. You can create multiple layers by comma-separating the values.</p>
+                        <div class="code-block"><pre><span class="selector">.card</span> {
+  <span class="comment">/* offset-x | offset-y | blur | spread | color */</span>
+  <span class="property">box-shadow</span>: <span class="value">0 10px 20px rgba(0,0,0,0.1)</span>;
+}
+<span class="selector">.title</span> {
+  <span class="property">text-shadow</span>: <span class="value">2px 2px 4px rgba(0,0,0,0.2)</span>;
+}</pre></div>
+                    </div>
+                    <div class="card">
+                        <h4>Gradients</h4>
+                        <p>Create smooth transitions between two or more colors. The headers on this page use them.</p>
+                        <div class="code-block"><pre><span class="selector">.hero</span> {
+  <span class="property">background</span>: <span class="value">linear-gradient(to right, #1f4037, #99f2c8)</span>;
+}
+<span class="selector">.circle</span> {
+  <span class="property">background</span>: <span class="value">radial-gradient(circle, #fff, #ddd)</span>;
+}</pre></div>
+                    </div>
+                    <div class="card">
+                        <h4>Blend Modes</h4>
+                        <p>Control how an element's content should blend with the content of the element's parent and background.</p>
+                        <div class="code-block"><pre><span class="selector">.image-overlay</span> {
+  <span class="property">background-color</span>: <span class="value">var(--primary-color)</span>;
+  <span class="comment">/* multiplies the darks */</span>
+  <span class="property">mix-blend-mode</span>: <span class="value">multiply</span>;
+}</pre></div>
+                    </div>
+
+                <!-- Gradients Interactive Example -->
+                <div class="card">
+                    <h4>🎨 Interactive Gradient Playground</h4>
+                    <p>Experiment with linear and radial gradients. Adjust the direction, colors, and type to see the effect in real time.</p>
+                    <div class="example" style="margin-bottom: 1em;">
+                        <div style="display: flex; flex-wrap: wrap; gap: 1em; align-items: center;">
+                            <label>
+                                Type:
+                                <select id="gradientType">
+                                    <option value="linear">Linear</option>
+                                    <option value="radial">Radial</option>
+                                </select>
+                            </label>
+                            <label>
+                                Direction/Shape:
+                                <input type="text" id="gradientDirection" value="to right" style="width: 90px;">
+                            </label>
+                            <label>
+                                Color 1:
+                                <input type="color" id="gradientColor1" value="#1f4037">
+                            </label>
+                            <label>
+                                Color 2:
+                                <input type="color" id="gradientColor2" value="#99f2c8">
+                            </label>
+                        </div>
+                        <div id="gradientDemoBox" style="margin-top: 1em; height: 80px; border-radius: 8px; border: 1px solid var(--section-border);"></div>
+                        <div class="output" id="gradientDemoCSS" style="margin-top: 0.5em; font-size: 0.95em;"></div>
+                    </div>
+                    <script>
+                        // Interactive Gradient Demo
+                        const gradientType = document.getElementById('gradientType');
+                        const gradientDirection = document.getElementById('gradientDirection');
+                        const gradientColor1 = document.getElementById('gradientColor1');
+                        const gradientColor2 = document.getElementById('gradientColor2');
+                        const gradientDemoBox = document.getElementById('gradientDemoBox');
+                        const gradientDemoCSS = document.getElementById('gradientDemoCSS');
+
+                        function updateGradientDemo() {
+                            let type = gradientType.value;
+                            let dir = gradientDirection.value.trim();
+                            let c1 = gradientColor1.value;
+                            let c2 = gradientColor2.value;
+                            let css;
+                            if (type === 'linear') {
+                                css = `linear-gradient(${dir}, ${c1}, ${c2})`;
+                            } else {
+                                css = `radial-gradient(${dir}, ${c1}, ${c2})`;
+                            }
+                            gradientDemoBox.style.background = css;
+                            gradientDemoCSS.innerHTML = `<span class="property">background</span>: <span class="value">${css}</span>;`;
+                        }
+                        gradientType.addEventListener('change', updateGradientDemo);
+                        gradientDirection.addEventListener('input', updateGradientDemo);
+                        gradientColor1.addEventListener('input', updateGradientDemo);
+                        gradientColor2.addEventListener('input', updateGradientDemo);
+                        updateGradientDemo();
+                    </script>
+                </div>
+
+                <!-- Blend Modes Interactive Example -->
+                <div class="card">
+                    <h4>🖌️ Interactive Blend Mode Playground</h4>
+                    <p>Try out different <code>mix-blend-mode</code> values to see how elements blend with their backgrounds.</p>
+                    <div class="example" style="margin-bottom: 1em;">
+                        <div style="display: flex; gap: 1em; align-items: center;">
+                            <label>
+                                Blend Mode:
+                                <select id="blendModeSelect">
+                                    <option value="normal">normal</option>
+                                    <option value="multiply">multiply</option>
+                                    <option value="screen">screen</option>
+                                    <option value="overlay">overlay</option>
+                                    <option value="darken">darken</option>
+                                    <option value="lighten">lighten</option>
+                                    <option value="color-dodge">color-dodge</option>
+                                    <option value="color-burn">color-burn</option>
+                                    <option value="hard-light">hard-light</option>
+                                    <option value="soft-light">soft-light</option>
+                                    <option value="difference">difference</option>
+                                    <option value="exclusion">exclusion</option>
+                                    <option value="hue">hue</option>
+                                    <option value="saturation">saturation</option>
+                                    <option value="color">color</option>
+                                    <option value="luminosity">luminosity</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div style="position: relative; width: 100%; height: 180px; margin-top: 1em;">
+                            <div style="position: absolute; inset: 0; background: linear-gradient(135deg, #f7971e, #ffd200 60%, #21d4fd); border-radius: 8px;"></div>
+                            <img id="blendModeImage" src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" alt="Blend Mode Example" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 8px; mix-blend-mode: multiply;">
+                        </div>
+                        <div class="output" id="blendModeCSS" style="margin-top: 0.5em; font-size: 0.95em;"></div>
+                    </div>
+                    <script>
+                        // Interactive Blend Mode Demo
+                        const blendModeSelect = document.getElementById('blendModeSelect');
+                        const blendModeImage = document.getElementById('blendModeImage');
+                        const blendModeCSS = document.getElementById('blendModeCSS');
+                        function updateBlendModeDemo() {
+                            blendModeImage.style.mixBlendMode = blendModeSelect.value;
+                            blendModeCSS.innerHTML = `<span class="property">mix-blend-mode</span>: <span class="value">${blendModeSelect.value}</span>;`;
+                        }
+                        blendModeSelect.addEventListener('change', updateBlendModeDemo);
+                        updateBlendModeDemo();
+                    </script>
+                </div>
+
+                <!-- Other Advanced Effects Interactive Example -->
+                <div class="card">
+                    <h4>✨ Other Advanced Effects</h4>
+                    <p>Try out <code>backdrop-filter</code> and <code>clip-path</code> for modern, eye-catching UI effects.</p>
+                    <div class="example" style="margin-bottom: 1em;">
+                        <div style="display: flex; flex-wrap: wrap; gap: 1em; align-items: center;">
+                            <label>
+                                Backdrop Filter:
+                                <select id="backdropFilterSelect">
+                                    <option value="none">none</option>
+                                    <option value="blur(6px)">blur(6px)</option>
+                                    <option value="brightness(1.5)">brightness(1.5)</option>
+                                    <option value="contrast(2)">contrast(2)</option>
+                                    <option value="grayscale(1)">grayscale(1)</option>
+                                    <option value="saturate(2)">saturate(2)</option>
+                                </select>
+                            </label>
+                            <label>
+                                Clip Path:
+                                <select id="clipPathSelect">
+                                    <option value="none">none</option>
+                                    <option value="circle(40% at 50% 50%)">circle</option>
+                                    <option value="ellipse(60% 40% at 50% 50%)">ellipse</option>
+                                    <option value="polygon(50% 0%, 100% 100%, 0% 100%)">triangle</option>
+                                    <option value="inset(10% 20% 10% 20%)">inset</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div style="position: relative; width: 100%; height: 180px; margin-top: 1em; background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80') center/cover no-repeat; border-radius: 8px; overflow: hidden;">
+                            <div id="backdropDemoBox" style="position: absolute; inset: 0; background: rgba(255,255,255,0.3); backdrop-filter: none; clip-path: none; transition: all 0.3s;"></div>
+                        </div>
+                        <div class="output" id="backdropDemoCSS" style="margin-top: 0.5em; font-size: 0.95em;"></div>
+                    </div>
+                    <script>
+                        // Interactive Backdrop Filter & Clip Path Demo
+                        const backdropFilterSelect = document.getElementById('backdropFilterSelect');
+                        const clipPathSelect = document.getElementById('clipPathSelect');
+                        const backdropDemoBox = document.getElementById('backdropDemoBox');
+                        const backdropDemoCSS = document.getElementById('backdropDemoCSS');
+                        function updateBackdropDemo() {
+                            backdropDemoBox.style.backdropFilter = backdropFilterSelect.value;
+                            backdropDemoBox.style.webkitBackdropFilter = backdropFilterSelect.value;
+                            backdropDemoBox.style.clipPath = clipPathSelect.value === 'none' ? 'none' : clipPathSelect.value;
+                            let css = '';
+                            if (backdropFilterSelect.value !== 'none') {
+                                css += `<span class="property">backdrop-filter</span>: <span class="value">${backdropFilterSelect.value}</span>;<br>`;
+                            }
+                            if (clipPathSelect.value !== 'none') {
+                                css += `<span class="property">clip-path</span>: <span class="value">${clipPathSelect.value}</span>;`;
+                            }
+                            if (!css) css = '<span class="comment">No advanced effect applied.</span>';
+                            backdropDemoCSS.innerHTML = css;
+                        }
+                        backdropFilterSelect.addEventListener('change', updateBackdropDemo);
+                        clipPathSelect.addEventListener('change', updateBackdropDemo);
+                        updateBackdropDemo();
+                    </script>
+                </div>
+
+                <!-- Use Cases Section for Advanced Techniques -->
+                <div class="card" style="background: var(--section-bg);">
+                    <h4>💡 Use Cases for Advanced CSS Techniques</h4>
+                    <ul>
+                        <li><strong>Gradients:</strong> <br>
+                            <ul>
+                                <li>Backgrounds for hero sections, buttons, and cards</li>
+                                <li>Overlay effects on images</li>
+                                <li>Text gradients for eye-catching headlines</li>
+                            </ul>
+                        </li>
+                        <li><strong>Blend Modes:</strong> <br>
+                            <ul>
+                                <li>Creative image overlays (e.g., colorizing photos)</li>
+                                <li>Text or icon overlays on backgrounds</li>
+                                <li>Artistic effects in banners and hero images</li>
+                            </ul>
+                        </li>
+                        <li><strong>Filters & Backdrop Filters:</strong> <br>
+                            <ul>
+                                <li>Blurring backgrounds behind modals or navigation</li>
+                                <li>Making text readable over busy images</li>
+                                <li>Color shifting or stylizing images on hover</li>
+                            </ul>
+                        </li>
+                        <li><strong>Clip Path:</strong> <br>
+                            <ul>
+                                <li>Non-rectangular image masks (e.g., circles, polygons)</li>
+                                <li>Creative section dividers and transitions</li>
+                                <li>Animated reveals and hover effects</li>
+                            </ul>
+                        </li>
+                        <li><strong>CSS Variables:</strong> <br>
+                            <ul>
+                                <li>Theming (light/dark mode, color schemes)</li>
+                                <li>Consistent spacing and sizing across components</li>
+                                <li>Dynamic style changes with JavaScript</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                </div>
+                 <h3>Filters</h3>
+                 <p>Apply graphical effects like blur, saturation, or color shifting to an element. Often used on images for dramatic effect.</p>
+                 <div class="example">
+                    <h4>Filter Demo</h4>
+                    <div class="filter-demo-container">
+                        <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" alt="Diagram of CSS Layout" class="filter-demo-image" id="filterDemoImage">
+                    </div>
+                     <div class="demo-area">
+                        <button class="interactive-btn" onclick="applyFilter('blur(5px)')">Blur</button>
+                        <button class="interactive-btn" onclick="applyFilter('grayscale(100%)')">Grayscale</button>
+                        <button class="interactive-btn" onclick="applyFilter('saturate(200%)')">Saturate</button>
+                        <button class="interactive-btn" onclick="applyFilter('hue-rotate(90deg)')">Hue Rotate</button>
+                        <button class="interactive-btn" onclick="applyFilter('none')">Reset</button>
+                    </div>
+                 </div>
+            </div>
+
+            <div class="section" data-topic="Responsive Design">
+                 <h2>📱 Responsive Design & Media Queries</h2>
+                <p>Responsive design ensures your website looks great on all devices. The primary tool for this is the **media query**. The "mobile-first" approach is the modern best practice.</p>
+                <h3>Visualizing Responsiveness</h3>
+                <p>The container below is a live example. Grab its bottom-right corner and resize it. You'll see the items inside automatically reflow to fit the available space, just like a real browser window.</p>
+                <div class="example">
+                    <div class="responsive-demo" id="responsiveDemo">
+                        <div class="responsive-demo-inner">
+                            <div class="responsive-demo-item">Item 1</div>
+                            <div class="responsive-demo-item">Item 2</div>
+                            <div class="responsive-demo-item">Item 3</div>
+                        </div>
+                    </div>
+                </div>
+                <h3>Mobile-First Media Query Syntax</h3>
+                <p>Start with base styles for mobile, then use `min-width` to add or override styles for larger screens. This is more efficient and leads to cleaner code.</p>
+                <div class="code-block"><pre><span class="comment">/* --- Default styles (Mobile) --- */</span>
+<span class="selector">.grid-container</span> {
+  <span class="property">display</span>: <span class="value">grid</span>;
+  <span class="property">grid-template-columns</span>: <span class="value">1fr</span>; <span class="comment">/* A single column on mobile */</span>
+  <span class="property">gap</span>: <span class="value">10px</span>;
+}
+
+<span class="comment">/* --- Tablet Styles (and up) --- */</span>
+<span class="keyword">@media</span> (min-width: 768px) {
+  <span class="selector">.grid-container</span> {
+    <span class="property">grid-template-columns</span>: <span class="value">1fr 1fr</span>; <span class="comment">/* Two columns on tablets */</span>
+  }
+}
+
+<span class="comment">/* --- Desktop Styles (and up) --- */</span>
+<span class="keyword">@media</span> (min-width: 1200px) {
+  <span class="selector">.grid-container</span> {
+    <span class="property">grid-template-columns</span>: <span class="value">repeat(3, 1fr)</span>; <span class="comment">/* Three columns on desktop */</span>
+  }
+}</pre></div>
+            </div>
+            
+        </div>
+
+        <div class="section" data-topic="Recommended YouTube Resources">
+            <h2>📺 Recommended YouTube Resources</h2>
+            <p>Reading is great, but seeing these concepts in action can make them click. These are some of the best, most respected creators for learning CSS on a deeper level.</p>
+            <div class="grid">
+                <div class="card">
+                    <h4>Kevin Powell - "Thinking in CSS"</h4>
+                    <p>Kevin is the king of CSS. This video is a great starting point to learn how to approach CSS problems with the right mindset. His entire channel is a goldmine.</p>
+                    <a href="https://www.youtube.com/watch?v=EvlZ-vE2bOQ" target="_blank" rel="noopener noreferrer">Watch on YouTube</a>
+                </div>
+                <div class="card">
+                    <h4>Fireship - "CSS in 100 Seconds"</h4>
+                    <p>A high-speed, information-dense overview of the most important CSS concepts. Perfect for a quick refresher or to see the big picture.</p>
+                    <a href="https://www.youtube.com/watch?v=O_9u1P5YjVc" target="_blank" rel="noopener noreferrer">Watch on YouTube</a>
+                </div>
+                <div class="card">
+                    <h4>Traversy Media - "CSS Crash Course"</h4>
+                    <p>Brad Traversy is a master at teaching beginners. This comprehensive crash course is perfect if you're starting out or need to solidify your fundamentals.</p>
+                    <a href="https://www.youtube.com/watch?v=yfoY53QXEnI" target="_blank" rel="noopener noreferrer">Watch on YouTube</a>
+                </div>
+                <div class="card">
+                    <h4>Web Dev Simplified - "Master Advanced CSS Selectors"</h4>
+                    <p>Go beyond `.class` and `#id`. This video will teach you the powerful selectors that let you write cleaner, more professional CSS without touching your HTML.</p>
+                    <a href="https://www.youtube.com/watch?v=l1m6s_J_fG8" target="_blank" rel="noopener noreferrer">Watch on YouTube</a>
+                </div>
+                <div class="card">
+                    <h4>freeCodeCamp.org - "Full CSS Course"</h4>
+                    <p>When you're ready for the ultimate deep dive, freeCodeCamp offers multi-hour university-level courses for free. This one covers everything imaginable.</p>
+                    <a href="https://www.youtube.com/watch?v=1Rs2ND1ryYc" target="_blank" rel="noopener noreferrer">Watch on YouTube</a>
+                </div>
+                <div class="card">
+                    <h4>The Net Ninja - "Flexbox & Grid Main Concepts"</h4>
+                    <p>The Net Ninja provides incredibly clear, project-based tutorials. His series on Flexbox and Grid are some of the best for mastering modern layouts.</p>
+                    <a href="https://www.youtube.com/watch?v=Y-B_OfH_4p0&list=PL4cUxeGkcC9i3FXbL042-yC-j4zV3s9Gk" target="_blank" rel="noopener noreferrer">Watch on YouTube</a>
+                </div>
+            </div>
+        </div>
+        <footer class="footer">
+            <p>© 2025 XenoDesigns. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+    <button id="backToTopBtn" title="Go to top">↑</button>
+    <div class="theme-switch-wrapper">
+        <label class="theme-switch" for="darkModeToggle">
+            <input type="checkbox" id="darkModeToggle" />
+            <span class="slider"></span>
+        </label>
+    </div>
+    <div id="searchNav">
+        <button id="searchNavUp" title="Previous match">↑</button>
+        <span id="searchNavCount"></span>
+        <button id="searchNavDown" title="Next match">↓</button>
+    </div>
+
+<script>
+    // --- INTERACTIVE DEMO FUNCTIONS ---
+    function updateFlexDemo(property, value) {
+        const container = document.getElementById('flexDemoContainer');
+        const output = document.getElementById('flexDemoOutput');
+        container.style[property] = value;
+        output.textContent = `.container { display: flex; justify-content: ${container.style.justifyContent || 'flex-start'}; align-items: ${container.style.alignItems || 'stretch'}; }`;
+    }
+
+    function updateGridDemo(property, value) {
+        const container = document.getElementById('gridDemoContainer');
+        const output = document.getElementById('gridDemoOutput');
+        container.style[property] = value;
+        output.textContent = `.container { display: grid; grid-template-columns: ${container.style.gridTemplateColumns}; }`;
+    }
+
+    function applyTransform(value) {
+        const box = document.getElementById('transformDemoBox');
+        if (box) box.style.transform = value;
+    }
+
+    function applyFilter(value) {
+        const image = document.getElementById('filterDemoImage');
+        if (image) image.style.filter = value;
+    }
+
+    // --- MAIN SCRIPT ---
+    document.addEventListener('DOMContentLoaded', () => {
+        let searchMatches = [];
+        let currentMatchIndex = -1;
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+        if(darkModeToggle) {
+            if (localStorage.getItem('theme') === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.checked = true;
+            }
+            darkModeToggle.addEventListener('change', () => {
+                body.classList.toggle('dark-mode');
+                localStorage.setItem('theme', body.classList.contains('dark-mode') ? 'dark' : 'light');
+            });
+        }
+        
+        const backToTopBtn = document.getElementById('backToTopBtn');
+        if(backToTopBtn) {
+            window.addEventListener('scroll', () => {
+                if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                    backToTopBtn.style.display = "block";
+                } else {
+                    backToTopBtn.style.display = "none";
+                }
+            });
+            backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        }
+
+        const searchContainer = document.getElementById('searchContainer');
+        if(searchContainer) {
+            // Enhanced sticky search bar logic with debugging
+            let searchBarOffset = searchContainer.offsetTop;
+            let isSticky = false;
+            
+            // Recalculate offset on window resize
+            window.addEventListener('resize', () => {
+                searchBarOffset = searchContainer.offsetTop;
+            });
+            
+            window.addEventListener('scroll', () => {
+                const scrollY = window.scrollY;
+                
+                // Add shadow effect when scrolled
+                if (scrollY > 10) {
+                    searchContainer.classList.add('sticky-shadow');
+                } else {
+                    searchContainer.classList.remove('sticky-shadow');
+                }
+                
+                // JavaScript fallback for sticky behavior if CSS sticky isn't working
+                if (scrollY > searchBarOffset + 50 && !isSticky) {
+                    // Force sticky behavior with JavaScript
+                    searchContainer.style.position = 'fixed';
+                    searchContainer.style.top = '0';
+                    searchContainer.style.left = '50%';
+                    searchContainer.style.transform = 'translateX(-50%)';
+                    searchContainer.style.width = 'calc(100% - 80px)';
+                    searchContainer.style.maxWidth = '1120px';
+                    searchContainer.style.zIndex = '1000';
+                    isSticky = true;
+                } else if (scrollY <= searchBarOffset && isSticky) {
+                    // Reset to normal positioning
+                    searchContainer.style.position = 'sticky';
+                    searchContainer.style.top = '0';
+                    searchContainer.style.left = '';
+                    searchContainer.style.transform = '';
+                    searchContainer.style.width = 'calc(100% - 80px)';
+                    searchContainer.style.maxWidth = '';
+                    isSticky = false;
+                }
+            });
+        }
+        
+        const sections = document.querySelectorAll('.section');
+        if (window.IntersectionObserver) {
+            const sectionObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { root: null, rootMargin: '0px', threshold: 0.1 });
+            sections.forEach(section => sectionObserver.observe(section));
+        } else {
+            sections.forEach(section => section.classList.add('is-visible'));
+        }
+
+        const tocList = document.querySelector('#tocNav ul');
+        if (tocList) {
+            const createIdFromText = (text) => text.trim().toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/[\s-]+/g, '-');
+            sections.forEach(section => {
+                const titleElement = section.querySelector('h2');
+                if (titleElement) {
+                    const titleText = titleElement.textContent.replace(/^[^\w]*/, '').trim();
+                    const sectionId = createIdFromText(titleText);
+                    section.id = sectionId;
+                    const listItem = document.createElement('li');
+                    const link = document.createElement('a');
+                    link.href = `#${sectionId}`;
+                    link.textContent = titleText;
+                    listItem.appendChild(link);
+                    tocList.appendChild(listItem);
+                }
+            });
+        }
+
+        const searchInput = document.getElementById('searchInput');
+        const searchButton = document.getElementById('searchButton');
+        const clearSearchButton = document.getElementById('clearSearchButton');
+        const searchNav = document.getElementById('searchNav');
+        const searchNavUp = document.getElementById('searchNavUp');
+        const searchNavDown = document.getElementById('searchNavDown');
+        const searchNavCount = document.getElementById('searchNavCount');
+        
+        if (searchInput) {
+            const allSearchableElements = document.querySelectorAll('.section h2, .section h3, .section h4, .section p, .section li, .card p, .card li, pre');
+            const originalContent = new Map();
+            allSearchableElements.forEach(el => originalContent.set(el, el.innerHTML));
+            
+            const clearHighlights = () => {
+                originalContent.forEach((html, el) => { if (el) el.innerHTML = html; });
+                searchMatches = [];
+                currentMatchIndex = -1;
+                if (searchNav) searchNav.style.display = 'none';
+                document.querySelectorAll('.current-search-match').forEach(el => el.classList.remove('current-search-match'));
+            };
+
+            const highlightCurrentMatch = () => {
+                document.querySelectorAll('.current-search-match').forEach(el => el.classList.remove('current-search-match'));
+                if (searchMatches[currentMatchIndex]) {
+                    searchMatches[currentMatchIndex].classList.add('current-search-match');
+                    searchMatches[currentMatchIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            };
+            
+            const updateSearchNav = () => {
+                if (searchMatches.length > 0) {
+                    if (searchNavCount) searchNavCount.textContent = `${currentMatchIndex + 1} of ${searchMatches.length}`;
+                }
+            };
+
+            const performSearch = () => {
+                clearHighlights();
+                const query = searchInput.value.trim();
+                if (!query) return;
+                const escapedQuery = query.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                const searchRegex = new RegExp(`(${escapedQuery})`, 'gi');
+                allSearchableElements.forEach(el => {
+                    const originalHtml = originalContent.get(el);
+                    if (el && originalHtml && searchRegex.test(el.textContent)) {
+                        el.innerHTML = originalHtml.replace(searchRegex, `<span class="highlight">$1</span>`);
+                    }
+                });
+                searchMatches = Array.from(document.querySelectorAll('.highlight'));
+                if (searchMatches.length > 0) {
+                    currentMatchIndex = 0;
+                    if (searchNav) searchNav.style.display = 'flex';
+                    updateSearchNav();
+                    highlightCurrentMatch();
+                } else {
+                    if (searchNav) searchNav.style.display = 'none';
+                }
+            };
+
+            searchButton.addEventListener('click', performSearch);
+            searchInput.addEventListener('keyup', e => e.key === 'Enter' && performSearch());
+            clearSearchButton.addEventListener('click', () => {
+                searchInput.value = '';
+                clearHighlights();
+            });
+
+            searchNavDown.addEventListener('click', () => {
+                if (searchMatches.length === 0) return;
+                currentMatchIndex = (currentMatchIndex + 1) % searchMatches.length;
+                updateSearchNav();
+                highlightCurrentMatch();
+            });
+
+            searchNavUp.addEventListener('click', () => {
+                if (searchMatches.length === 0) return;
+                currentMatchIndex = (currentMatchIndex - 1 + searchMatches.length) % searchMatches.length;
+                updateSearchNav();
+                highlightCurrentMatch();
+            });
+        }
+    });
+</script>
+</body>
+</html>
