@@ -2365,7 +2365,9 @@ ReactDOM.createRoot(document.getElementById(<span class="string">'root'</span>))
         // --- useMemo & useCallback Demo ---
         const slowFunction = (num) => {
             console.log('Calling Slow Function...');
-            for (let i = 0; i <= 1000000000; i++) {}
+            // This loop is intentionally slow to demonstrate memoization,
+            // but not so slow that it freezes the browser.
+            for (let i = 0; i <= 100000000; i++) {}
             return num * 2;
         };
 
