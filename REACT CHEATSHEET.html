@@ -492,6 +492,16 @@
                     <div class="code-block"><pre><span class="comment"># Note: This is now considered legacy</span>
 <span class="variable">npx create-react-app my-app</span></pre></div>
                 </div>
+                <div class="card">
+                    <h4>Creating a TypeScript App</h4>
+                    <p>To use TypeScript, you can use a specific template during project creation.</p>
+                    <div class="code-block"><pre><span class="comment"># Vite with TypeScript</span>
+<span class="variable">npm create vite@latest my-ts-app -- --template react-ts</span>
+
+<span class="comment"># Next.js with TypeScript</span>
+<span class="comment"># create-next-app will prompt you to use TypeScript by default</span>
+<span class="variable">npx create-next-app@latest my-next-ts-app</span></pre></div>
+                </div>
             </section>
             
             <!-- Getting Started with React -->
@@ -637,6 +647,17 @@ ReactDOM.createRoot(<span class="variable">rootElement</span>).render(
 
                 <h3>Rendering Lists (Loops)</h3>
                 <p>Use the `.map()` array method to transform an array of data into an array of JSX elements. **Always provide a unique `key` prop for each item in the list.**</p>
+
+                <div class="card">
+                    <h4>The `src` Attribute</h4>
+                    <p>When including images, you can import the image file directly into your component. This tells the build tool (like Vite or Create React App) to include the image in the build folder.</p>
+                    <div class="code-block"><pre><span class="keyword">import</span> <span class="variable">logo</span> <span class="keyword">from</span> <span class="string">'./logo.png'</span>; <span class="comment">// Tell webpack this JS file uses this image</span>
+
+<span class="keyword">function</span> <span class="function">Header</span>() {
+  <span class="comment">// logo will be a string like '/static/media/logo.5d5d9eef.png'</span>
+  <span class="keyword">return</span> &lt;<span class="tag">img</span> <span class="attr-name">src</span>={logo} <span class="attr-name">alt</span>=<span class="attr-value">"Logo"</span> /&gt;;
+}</pre></div>
+                </div>
                 <div class="code-block"><pre><span class="keyword">function</span> <span class="function">TodoList</span>({ <span class="variable">todos</span> }) {
   <span class="keyword">const</span> <span class="variable">listItems</span> = todos.map((<span class="variable">todo</span>) =>
     &lt;<span class="tag">li</span> <span class="attr-name">key</span>={todo.id}&gt;
@@ -1054,6 +1075,95 @@ Greeting.propTypes = {
                     </div>
                 </div>
 
+                <h3>The `useReducer` Hook - For Complex State</h3>
+                <p>An alternative to `useState`. It's usually preferable to `useState` when you have complex state logic that involves multiple sub-values or when the next state depends on the previous one.</p>
+                <div class="code-block"><pre><span class="keyword">const</span> [<span class="variable">state</span>, <span class="variable">dispatch</span>] = useReducer(<span class="variable">reducer</span>, <span class="variable">initialState</span>);</pre></div>
+                <ul>
+                    <li><strong>reducer:</strong> A function `(state, action) => newState` that specifies how the state gets updated.</li>
+                    <li><strong>initialState:</strong> The initial state value.</li>
+                    <li><strong>state:</strong> The current state.</li>
+                    <li><strong>dispatch:</strong> A function you call to trigger a state update by "dispatching" an action object.</li>
+                </ul>
+                <h4>Interactive `useReducer` Demo: To-Do List</h4>
+                <div class="example">
+                    <div id="useReducerDemo"></div>
+                </div>
+
+                <h3>The `useRef` Hook - Escaping the Render Cycle</h3>
+                <p>The `useRef` Hook allows you to persist values between renders without causing a re-render. It has two main use cases:</p>
+                <div class="grid">
+                    <div class="card">
+                        <h4>1. Accessing DOM Nodes</h4>
+                        <p>Attach a ref to a JSX element to directly access its underlying DOM node for things like managing focus, text selection, or media playback.</p>
+                    </div>
+                    <div class="card">
+                        <h4>2. Storing a Mutable Value</h4>
+                        <p>You can store any mutable value in a ref's `.current` property. Updating it does <strong>not</strong> trigger a re-render. This is useful for storing interval IDs, previous state values, etc.</p>
+                    </div>
+                </div>
+                <h4>Interactive `useRef` Demo: Focus Input & Track Renders</h4>
+                <div class="example">
+                    <div id="useRefDemo"></div>
+                </div>
+
+                <h3>The `useContext` Hook - Avoiding Prop Drilling</h3>
+                <p>`useContext` lets you subscribe to React context without introducing nesting. It makes it possible to pass data through the component tree without having to pass props down manually at every level.</p>
+                <div class="code-block"><pre><span class="comment">// 1. Create a Context</span>
+<span class="keyword">const</span> <span class="variable">ThemeContext</span> = React.createContext(<span class="string">'light'</span>);
+
+<span class="comment">// 2. Provide the Context value at a high level in the tree</span>
+<span class="keyword">function</span> <span class="function">App</span>() {
+  <span class="keyword">const</span> [<span class="variable">theme</span>, <span class="variable">setTheme</span>] = useState(<span class="string">'dark'</span>);
+  <span class="keyword">return</span> (
+    &lt;<span class="tag">ThemeContext.Provider</span> <span class="attr-name">value</span>={{ <span class="variable">theme</span>, <span class="variable">setTheme</span> }}&gt;
+      &lt;<span class="tag">Toolbar</span> /&gt;
+    &lt;/<span class="tag">ThemeContext.Provider</span>&gt;
+  );
+}
+
+<span class="comment">// 3. Consume the Context in any child component</span>
+<span class="keyword">function</span> <span class="function">ThemedButton</span>() {
+  <span class="keyword">const</span> { <span class="variable">theme</span>, <span class="variable">setTheme</span> } = useContext(<span class="variable">ThemeContext</span>);
+  <span class="keyword">return</span> (
+    &lt;<span class="tag">button</span>
+      <span class="attr-name">style</span>={{ <span class="variable">background</span>: theme === <span class="string">'dark'</span> ? <span class="string">'#333'</span> : <span class="string">'#FFF'</span> }}
+      <span class="attr-name">onClick</span>={() => setTheme(theme === <span class="string">'dark'</span> ? <span class="string">'light'</span> : <span class="string">'dark'</span>)}
+    &gt;
+      <span class="punctuation">Switch Theme</span>
+    &lt;/<span class="tag">button</span>&gt;
+  );
+}</pre></div>
+                <h4>Interactive `useContext` Demo: Theme Switcher</h4>
+                <div class="example">
+                    <div id="useContextDemo"></div>
+                </div>
+
+                <h3>Memoization Hooks: `useCallback` & `useMemo`</h3>
+                <p>These hooks are performance optimizations. You should only use them when you have a measurable performance problem.</p>
+                <div class="grid">
+                    <div class="card">
+                        <h4>`useCallback` - Memoize Functions</h4>
+                        <p>Returns a memoized version of a callback function that only changes if one of the dependencies has changed. This is useful when passing callbacks to optimized child components that rely on reference equality to prevent unnecessary renders.</p>
+                        <div class="code-block"><pre><span class="keyword">const</span> <span class="variable">memoizedCallback</span> = useCallback(
+  () => { <span class="function">doSomething</span>(<span class="variable">a</span>, <span class="variable">b</span>); },
+  [<span class="variable">a</span>, <span class="variable">b</span>],
+);</pre></div>
+                    </div>
+                    <div class="card">
+                        <h4>`useMemo` - Memoize Values</h4>
+                        <p>Returns a memoized value. It will only recompute the memoized value when one of the dependencies has changed. This is useful to avoid expensive calculations on every render.</p>
+                        <div class="code-block"><pre><span class="keyword">const</span> <span class="variable">memoizedValue</span> = useMemo(
+  () => <span class="function">computeExpensiveValue</span>(<span class="variable">a</span>, <span class="variable">b</span>),
+  [<span class="variable">a</span>, <span class="variable">b</span>]
+);</pre></div>
+                    </div>
+                </div>
+                <h4>Interactive `useMemo` & `useCallback` Demo</h4>
+                 <div class="example">
+                    <div id="memoizationDemo"></div>
+                </div>
+
+
                 <h3>Handling DOM Events - Complete Guide</h3>
                 <p>React has a synthetic event system that works cross-browser. Event handlers are passed as props, like `onClick`, `onChange`, `onSubmit`.</p>
                 
@@ -1061,7 +1171,7 @@ Greeting.propTypes = {
                 <div class="grid">
                     <div class="card">
                         <h4>Form Handling with Validation</h4>
-                        <p>Complete form with validation and error handling.</p>
+                        <p>Complete form with validation and error handling. This is a prime example of handling events like `onSubmit` and `onChange`.</p>
                         <div class="code-block"><pre><span class="keyword">function</span> <span class="function">ValidatedForm</span>() {
   <span class="keyword">const</span> [<span class="variable">formData</span>, <span class="variable">setFormData</span>] = useState({
     <span class="variable">email</span>: <span class="string">''</span>,
@@ -1141,55 +1251,6 @@ Greeting.propTypes = {
   );
 }</pre></div>
                     </div>
-                    <div class="card">
-                        <h4>Navbar Component</h4>
-                        <p>A responsive navigation bar with links.</p>
-                        <div class="code-block"><pre><span class="keyword">function</span> <span class="function">Navbar</span>({ <span class="variable">items</span> }) {
-  <span class="keyword">const</span> <span class="variable">navStyle</span> = {
-    <span class="variable">display</span>: <span class="string">'flex'</span>, <span class="variable">justifyContent</span>: <span class="string">'space-around'</span>,
-    <span class="variable">backgroundColor</span>: <span class="string">'#333'</span>, <span class="variable">padding</span>: <span class="string">'1rem'</span>
-  };
-  <span class="keyword">const</span> <span class="variable">linkStyle</span> = { <span class="variable">color</span>: <span class="string">'white'</span>, <span class="variable">textDecoration</span>: <span class="string">'none'</span> };
-
-  <span class="keyword">return</span> (
-    &lt;<span class="tag">nav</span> <span class="attr-name">style</span>={navStyle}&gt;
-      {items.map((<span class="variable">item</span>) => (
-        &lt;<span class="tag">a</span> <span class="attr-name">key</span>={item.label} <span class="attr-name">href</span>={item.href} <span class="attr-name">style</span>={linkStyle}&gt;
-          {item.label}
-        &lt;/<span class="tag">a</span>&gt;
-      ))}
-    &lt;/<span class="tag">nav</span>&gt;
-  );
-}
-<span class="comment">// Usage: &lt;Navbar items={[{label: 'Home', href: '/'}, {label: 'About', href: '/about'}]} /&gt;</span></pre></div>
-                    </div>
-                    
-                    <div class="card">
-                        <h4>Footer Component</h4>
-                        <p>A simple footer with the current year.</p>
-                        <div class="code-block"><pre><span class="keyword">function</span> <span class="function">Footer</span>() {
-  <span class="keyword">const</span> <span class="variable">currentYear</span> = <span class="keyword">new</span> Date().getFullYear();
-  <span class="keyword">const</span> <span class="variable">footerStyle</span> = {
-    <span class="variable">textAlign</span>: <span class="string">'center'</span>, <span class="variable">padding</span>: <span class="string">'1rem'</span>,
-    <span class="variable">backgroundColor</span>: <span class="string">'#f1f1f1'</span>, <span class="variable">marginTop</span>: <span class="string">'2rem'</span>
-  };
-  <span class="keyword">return</span> (
-    &lt;<span class="tag">footer</span> <span class="attr-name">style</span>={footerStyle}&gt;
-      &lt;<span class="tag">p</span>&gt;<span class="punctuation">&copy; {currentYear} My Awesome Company</span>&lt;/<span class="tag">p</span>&gt;
-    &lt;/<span class="tag">footer</span>&gt;
-  );
-}
-<span class="comment">// Usage: &lt;Footer /&gt;</span></pre></div>
-                    </div>
-
-                    <div class="card">
-                        <h4>Accordion Component (Interactive)</h4>
-                        <p>An interactive accordion to show and hide content.</p>
-                        <div class="example">
-                            <h4>Interactive Accordion Demo</h4>
-                            <div id="accordionDemo"></div>
-                        </div>
-                    </div>
                 </div>
 
                 <h4>Interactive Event Handling Demo</h4>
@@ -1227,6 +1288,40 @@ Greeting.propTypes = {
                 <h2>🏗️ Building Common UI Components</h2>
                 <p>Let's build some common, reusable components with props and state.</p>
                 
+                <div class="card">
+                    <h4>Header Component</h4>
+                    <p>A typical site header often contains a logo, navigation, and maybe a call-to-action button. This example combines several concepts.</p>
+                    <div class="code-block"><pre><span class="keyword">import</span> <span class="variable">logo</span> <span class="keyword">from</span> <span class="string">'./logo.svg'</span>; <span class="comment">// Assuming you have a logo file</span>
+
+<span class="keyword">function</span> <span class="function">Header</span>({ <span class="variable">navItems</span> }) {
+  <span class="keyword">const</span> <span class="variable">headerStyle</span> = {
+    <span class="variable">display</span>: <span class="string">'flex'</span>,
+    <span class="variable">justifyContent</span>: <span class="string">'space-between'</span>,
+    <span class="variable">alignItems</span>: <span class="string">'center'</span>,
+    <span class="variable">padding</span>: <span class="string">'1rem 2rem'</span>,
+    <span class="variable">backgroundColor</span>: <span class="string">'#20232a'</span>,
+    <span class="variable">color</span>: <span class="string">'white'</span>
+  };
+  <span class="keyword">const</span> <span class="variable">navStyle</span> = { <span class="variable">display</span>: <span class="string">'flex'</span>, <span class="variable">gap</span>: <span class="string">'1rem'</span> };
+  <span class="keyword">const</span> <span class="variable">logoStyle</span> = { <span class="variable">height</span>: <span class="string">'40px'</span> };
+
+  <span class="keyword">return</span> (
+    &lt;<span class="tag">header</span> <span class="attr-name">style</span>={headerStyle}&gt;
+      &lt;<span class="tag">img</span> <span class="attr-name">src</span>={logo} <span class="attr-name">style</span>={logoStyle} <span class="attr-name">alt</span>=<span class="attr-value">"Logo"</span> /&gt;
+      &lt;<span class="tag">nav</span> <span class="attr-name">style</span>={navStyle}&gt;
+        {navItems.map((<span class="variable">item</span>) => (
+          &lt;<span class="tag">a</span> <span class="attr-name">key</span>={item.label} <span class="attr-name">href</span>={item.href} <span class="attr-name">style</span>={{ <span class="variable">color</span>: <span class="string">'#61DAFB'</span>, <span class="variable">textDecoration</span>: <span class="string">'none'</span> }}&gt;
+            {item.label}
+          &lt;/<span class="tag">a</span>&gt;
+        ))}
+      &lt;/<span class="tag">nav</span>&gt;
+      &lt;<span class="tag">button</span>&gt;<span class="punctuation">Sign Up</span>&lt;/<span class="tag">button</span>&gt;
+    &lt;/<span class="tag">header</span>&gt;
+  );
+}
+</pre></div>
+                </div>
+
                 <div class="card">
                     <h4>Navbar Component</h4>
                     <p>A responsive navigation bar with links.</p>
@@ -1286,50 +1381,125 @@ Greeting.propTypes = {
                 <div class="grid">
                     <div class="card">
                         <h4>Tailwind CSS</h4>
-                        <p>A utility-first CSS framework for rapidly building custom designs directly in your JSX.</p>
-                        <div class="code-block"><pre><span class="comment">// After setting up Tailwind in your project</span>
-<span class="keyword">function</span> <span class="function">AlertButton</span>() {
+                        <p>A utility-first CSS framework for rapidly building custom UIs directly in your markup. Instead of writing custom CSS, you apply pre-existing classes.</p>
+                        <div class="code-block"><pre><span class="comment">// 1. Follow the official Tailwind CSS installation guide for your framework.</span>
+<span class="comment">// 2. Build components by applying utility classes.</span>
+
+<span class="keyword">function</span> <span class="function">ProductCard</span>({ <span class="variable">title</span>, <span class="variable">description</span>, <span class="variable">imageUrl</span> }) {
   <span class="keyword">return</span> (
-    &lt;<span class="tag">button</span> <span class="attr-name">className</span>=<span class="attr-value">"bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full shadow-lg"</span>&gt;
-      <span class="punctuation">Save Changes</span>
-    &lt;/<span class="tag">button</span>&gt;
+    &lt;<span class="tag">div</span> <span class="attr-name">className</span>=<span class="attr-value">"max-w-sm rounded overflow-hidden shadow-lg bg-white m-4"</span>&gt;
+      &lt;<span class="tag">img</span> <span class="attr-name">className</span>=<span class="attr-value">"w-full"</span> <span class="attr-name">src</span>={imageUrl} <span class="attr-name">alt</span>=<span class="attr-value">"Product Image"</span> /&gt;
+      &lt;<span class="tag">div</span> <span class="attr-name">className</span>=<span class="attr-value">"px-6 py-4"</span>&gt;
+        &lt;<span class="tag">div</span> <span class="attr-name">className</span>=<span class="attr-value">"font-bold text-xl mb-2"</span>&gt;<span class="punctuation">{title}</span>&lt;/<span class="tag">div</span>&gt;
+        &lt;<span class="tag">p</span> <span class="attr-name">className</span>=<span class="attr-value">"text-gray-700 text-base"</span>&gt;
+          <span class="punctuation">{description}</span>
+        &lt;/<span class="tag">p</span>&gt;
+      &lt;/<span class="tag">div</span>&gt;
+      &lt;<span class="tag">div</span> <span class="attr-name">className</span>=<span class="attr-value">"px-6 pt-4 pb-2"</span>&gt;
+        &lt;<span class="tag">button</span> <span class="attr-name">className</span>=<span class="attr-value">"bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"</span>&gt;
+          <span class="punctuation">Buy Now</span>
+        &lt;/<span class="tag">button</span>&gt;
+      &lt;/<span class="tag">div</span>&gt;
+    &lt;/<span class="tag">div</span>&gt;
   );
-}</pre></div>
+}
+</pre></div>
                     </div>
                     <div class="card">
-                        <h4>Bootstrap</h4>
-                        <p>Use the `react-bootstrap` library to get Bootstrap components that are rebuilt for React.</p>
-                        <div class="code-block"><pre><span class="comment">// npm install react-bootstrap bootstrap</span>
-<span class="keyword">import</span> <span class="variable">Button</span> <span class="keyword">from</span> <span class="string">'react-bootstrap/Button'</span>;
+                        <h4>React Bootstrap</h4>
+                        <p>The most popular front-end framework rebuilt for React. Get pre-styled components that are easy to import and use.</p>
+                        <div class="code-block"><pre><span class="comment">// 1. Installation</span>
+<span class="variable">npm install react-bootstrap bootstrap</span>
 
-<span class="keyword">function</span> <span class="function">BootstrapButton</span>() {
-  <span class="keyword">return</span> &lt;<span class="tag">Button</span> <span class="attr-name">variant</span>=<span class="attr-value">"primary"</span>&gt;<span class="punctuation">Primary Button</span>&lt;/<span class="tag">Button</span>&gt;;
-}</pre></div>
+<span class="comment">// 2. Import CSS in your app's entry point (e.g., index.js or App.js)</span>
+<span class="keyword">import</span> <span class="string">'bootstrap/dist/css/bootstrap.min.css'</span>;
+
+<span class="comment">// 3. Import and use components</span>
+<span class="keyword">import</span> { Modal, Button } <span class="keyword">from</span> <span class="string">'react-bootstrap'</span>;
+<span class="keyword">import</span> { useState } <span class="keyword">from</span> <span class="string">'react'</span>;
+
+<span class="keyword">function</span> <span class="function">ExampleModal</span>() {
+  <span class="keyword">const</span> [<span class="variable">show</span>, <span class="variable">setShow</span>] = useState(<span class="keyword">false</span>);
+
+  <span class="keyword">const</span> <span class="function">handleClose</span> = () => setShow(<span class="keyword">false</span>);
+  <span class="keyword">const</span> <span class="function">handleShow</span> = () => setShow(<span class="keyword">true</span>);
+
+  <span class="keyword">return</span> (
+    &lt;&gt;
+      &lt;<span class="tag">Button</span> <span class="attr-name">variant</span>=<span class="attr-value">"primary"</span> <span class="attr-name">onClick</span>={handleShow}&gt;
+        <span class="punctuation">Launch demo modal</span>
+      &lt;/<span class="tag">Button</span>&gt;
+
+      &lt;<span class="tag">Modal</span> <span class="attr-name">show</span>={show} <span class="attr-name">onHide</span>={handleClose}&gt;
+        &lt;<span class="tag">Modal.Header</span> <span class="attr-name">closeButton</span>&gt;
+          &lt;<span class="tag">Modal.Title</span>&gt;<span class="punctuation">Modal heading</span>&lt;/<span class="tag">Modal.Title</span>&gt;
+        &lt;/<span class="tag">Modal.Header</span>&gt;
+        &lt;<span class="tag">Modal.Body</span>&gt;<span class="punctuation">Woohoo, you're reading this text in a modal!</span>&lt;/<span class="tag">Modal.Body</span>&gt;
+        &lt;<span class="tag">Modal.Footer</span>&gt;
+          &lt;<span class="tag">Button</span> <span class="attr-name">variant</span>=<span class="attr-value">"secondary"</span> <span class="attr-name">onClick</span>={handleClose}&gt;
+            <span class="punctuation">Close</span>
+          &lt;/<span class="tag">Button</span>&gt;
+        &lt;/<span class="tag">Modal.Footer</span>&gt;
+      &lt;/<span class="tag">Modal</span>&gt;
+    &lt;/&gt;
+  );
+}
+</pre></div>
                     </div>
-                </div>
-
-                <h3>Animations with GSAP</h3>
-                <p>GSAP (GreenSock Animation Platform) is a powerful library for creating high-performance animations.</p>
-                <div class="card">
-                    <h4>Animating on Mount with `useEffect`</h4>
-                    <p>Use `useEffect` with an empty dependency array `[]` to trigger an animation when a component first renders.</p>
-                    <div class="code-block"><pre><span class="comment">// npm install gsap</span>
-<span class="keyword">import</span> { <span class="variable">useRef</span>, <span class="variable">useEffect</span> } <span class="keyword">from</span> <span class="string">'react'</span>;
-<span class="keyword">import</span> { <span class="variable">gsap</span> } <span class="keyword">from</span> <span class="string">'gsap'</span>;
+                    <div class="card">
+                        <h4>GSAP (GreenSock)</h4>
+                        <p>A professional-grade animation library for JavaScript. It's powerful, high-performance, and can animate anything JavaScript can touch.</p>
+                        <div class="code-block"><pre><span class="comment">// npm install gsap</span>
+<span class="keyword">import</span> { useLayoutEffect, useRef } <span class="keyword">from</span> <span class="string">'react'</span>;
+<span class="keyword">import</span> { gsap } <span class="keyword">from</span> <span class="string">'gsap'</span>;
 
 <span class="keyword">function</span> <span class="function">AnimatedBox</span>() {
   <span class="keyword">const</span> <span class="variable">boxRef</span> = useRef();
 
-  useEffect(() => {
-    <span class="comment">// Animate the box on component mount</span>
-    gsap.from(boxRef.current, { 
-      <span class="variable">opacity</span>: <span class="number">0</span>, 
-      <span class="variable">y</span>: <span class="number">50</span>, 
-      <span class="variable">duration</span>: <span class="number">1</span> 
-    });
+  <span class="comment">// useLayoutEffect runs synchronously after all DOM mutations.</span>
+  <span class="comment">// Good for animations to avoid flicker.</span>
+  useLayoutEffect(() => {
+    <span class="keyword">let</span> <span class="variable">ctx</span> = gsap.context(() => {
+      <span class="comment">// Animate the box on component mount</span>
+      gsap.to(boxRef.current, { <span class="variable">rotation</span>: <span class="string">"+=360"</span>, <span class="variable">duration</span>: <span class="number">1</span> });
+    }, boxRef); <span class="comment">// scope the context to the box</span>
+
+    <span class="keyword">return</span> () => <span class="variable">ctx</span>.revert(); <span class="comment">// cleanup</span>
   }, []);
 
-  <span class="keyword">return</span> &lt;<span class="tag">div</span> <span class="attr-name">ref</span>={boxRef} <span class="attr-name">className</span>=<span class="attr-value">"box-style"</span>&gt;<span class="punctuation">I will animate!</span>&lt;/<span class="tag">div</span>&gt;;
+  <span class="keyword">return</span> &lt;<span class="tag">div</span> <span class="attr-name">ref</span>={boxRef} <span class="attr-name">className</span>=<span class="attr-value">"box-style"</span>&gt;<span class="punctuation">Spin me!</span>&lt;/<span class="tag">div</span>&gt;;
+}</pre></div>
+                    </div>
+                     <div class="card">
+                        <h4>CSS Transitions & Animations</h4>
+                        <p>Don't forget the power of CSS! For many UI animations, simple CSS transitions or keyframes are efficient and easy to implement.</p>
+                        <div class="code-block"><pre><span class="comment">// 1. Add a CSS class with a transition</span>
+<span class="comment">.fade-in {</span>
+<span class="comment">  opacity: 0;</span>
+<span class="comment">  transform: translateY(20px);</span>
+<span class="comment">  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;</span>
+<span class="comment">}</span>
+<span class="comment">.fade-in.visible {</span>
+<span class="comment">  opacity: 1;</span>
+<span class="comment">  transform: translateY(0);</span>
+<span class="comment">}</span>
+
+<span class="comment">// 2. Toggle the class in your component</span>
+<span class="keyword">import</span> { useState, useEffect } <span class="keyword">from</span> <span class="string">'react'</span>;
+
+<span class="keyword">function</span> <span class="function">FadingComponent</span>() {
+  <span class="keyword">const</span> [<span class="variable">isVisible</span>, <span class="variable">setIsVisible</span>] = useState(<span class="keyword">false</span>);
+
+  useEffect(() => {
+    <span class="comment">// Mount animation</span>
+    setIsVisible(<span class="keyword">true</span>);
+  }, []);
+
+  <span class="keyword">return</span> (
+    &lt;<span class="tag">div</span> <span class="attr-name">className</span>={`<span class="variable">fade-in</span> ${isVisible ? <span class="string">'visible'</span> : <span class="string">''</span>}`}&gt;
+      <span class="punctuation">I will fade in on mount!</span>
+    &lt;/<span class="tag">div</span>&gt;
+  );
 }</pre></div>
                     </div>
                 </div>
@@ -1341,52 +1511,165 @@ Greeting.propTypes = {
                 <div class="grid">
                     <div class="card">
                         <h4>Fetching API Data</h4>
-                        <p>Use `useEffect` and `useState` to fetch data from an external API and display it.</p>
-                        <div class="code-block"><pre><span class="keyword">function</span> <span class="function">Post</span>({ <span class="variable">postId</span> }) {
-  <span class="keyword">const</span> [<span class="variable">post</span>, <span class="variable">setPost</span>] = useState(<span class="keyword">null</span>);
-
+                        <p>Use `useEffect` and `useState` to fetch data. While the native `fetch` API works well, `axios` is a popular alternative that simplifies the process.</p>
+                        <h5>Common Libraries:</h5>
+                        <ul>
+                            <li><strong>fetch:</strong> Built into modern browsers. Requires manual handling for JSON parsing and errors.</li>
+                            <li><strong>axios:</strong> A third-party library (`npm install axios`). Automatically parses JSON, has better error handling, and a simpler API.</li>
+                        </ul>
+                        <div class="code-block"><pre><span class="comment">// Using the native fetch API</span>
+<span class="keyword">function</span> <span class="function">FetchComponent</span>({ <span class="variable">url</span> }) {
+  <span class="keyword">const</span> [<span class="variable">data</span>, <span class="variable">setData</span>] = useState(<span class="keyword">null</span>);
   useEffect(() => {
-    <span class="keyword">async function</span> <span class="function">fetchPost</span>() {
-      <span class="keyword">const</span> <span class="variable">res</span> = <span class="keyword">await</span> fetch(<span class="string">`https://.../posts/${postId}`</span>);
-      <span class="keyword">const</span> <span class="variable">data</span> = <span class="keyword">await</span> res.json();
-      setPost(<span class="variable">data</span>);
-    }
-    fetchPost();
-  }, [<span class="variable">postId</span>]); <span class="comment">// Re-fetch if postId changes</span>
+    fetch(url)
+      .then(response => {
+        <span class="keyword">if</span> (!response.ok) {
+          <span class="keyword">throw new</span> Error(<span class="string">'Network response was not ok'</span>);
+        }
+        <span class="keyword">return</span> response.json();
+      })
+      .then(jsonData => setData(jsonData))
+      .catch(error => console.error(<span class="string">'Fetch error:'</span>, error));
+  }, [url]);
+  <span class="comment">// ... render data</span>
+}
 
-  <span class="keyword">if</span> (!<span class="variable">post</span>) <span class="keyword">return</span> <span class="string">'Loading...'</span>;
-  <span class="keyword">return</span> &lt;<span class="tag">h1</span>&gt;<span class="punctuation">{post.title}</span>&lt;/<span class="tag">h1</span>&gt;;
-}</pre></div>
+<span class="comment">// Using axios for a cleaner approach</span>
+<span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">'axios'</span>;
+<span class="keyword">function</span> <span class="function">AxiosComponent</span>({ <span class="variable">url</span> }) {
+  <span class="keyword">const</span> [<span class="variable">data</span>, <span class="variable">setData</span>] = useState(<span class="keyword">null</span>);
+  useEffect(() => {
+    axios.get(url)
+      .then(response => setData(response.data))
+      .catch(error => console.error(<span class="string">'Axios error:'</span>, error));
+  }, [url]);
+  <span class="comment">// ... render data</span>
+}
+</pre></div>
                     </div>
                     <div class="card">
                         <h4>React Router</h4>
-                        <p>The standard library for client-side routing in React.</p>
+                        <p>The standard library for client-side routing. It enables navigation among views of various components in a React Application, allows changing the browser URL, and keeps the UI in sync with the URL.</p>
+                        <h5>Core Components:</h5>
+                        <ul>
+                            <li><code>BrowserRouter</code>: Wraps your app to enable routing.</li>
+                            <li><code>Routes</code>: A container for a collection of <code>&lt;Route&gt;</code>s.</li>
+                            <li><code>Route</code>: Renders some UI when its path matches the current URL.</li>
+                            <li><code>Link</code>: A component to create links that navigate between routes without a page refresh.</li>
+                        </ul>
+                        <h5>Common Hooks:</h5>
+                        <ul>
+                            <li><code>useNavigate</code>: For programmatic navigation (e.g., after a form submission).</li>
+                            <li><code>useParams</code>: To access URL parameters from the route path (e.g., `/users/:userId`).</li>
+                        </ul>
                         <div class="code-block"><pre><span class="comment">// npm install react-router-dom</span>
-<span class="keyword">import</span> { <span class="variable">BrowserRouter</span>, <span class="variable">Routes</span>, <span class="variable">Route</span>, <span class="variable">Link</span> } <span class="keyword">from</span> <span class="string">'react-router-dom'</span>;
+<span class="keyword">import</span> {
+  BrowserRouter, Routes, Route, Link, useParams, useNavigate
+} <span class="keyword">from</span> <span class="string">'react-router-dom'</span>;
+
+<span class="comment">// Define some components to render for our routes</span>
+<span class="keyword">const</span> <span class="function">Home</span> = () => &lt;<span class="tag">h2</span>&gt;<span class="punctuation">Home</span>&lt;/<span class="tag">h2</span>&gt;;
+<span class="keyword">const</span> <span class="function">Profile</span> = () => {
+  <span class="keyword">const</span> { <span class="variable">userId</span> } = useParams();
+  <span class="keyword">return</span> &lt;<span class="tag">h2</span>&gt;<span class="punctuation">Profile for User ID: {userId}</span>&lt;/<span class="tag">h2</span>&gt;;
+};
+<span class="keyword">const</span> <span class="function">Dashboard</span> = () => {
+  <span class="keyword">const</span> <span class="variable">navigate</span> = useNavigate();
+  <span class="keyword">const</span> <span class="function">goToProfile</span> = () => navigate(<span class="string">'/user/123'</span>);
+  <span class="keyword">return</span> (
+    &lt;&gt;
+      &lt;<span class="tag">h2</span>&gt;<span class="punctuation">Dashboard</span>&lt;/<span class="tag">h2</span>&gt;
+      &lt;<span class="tag">button</span> <span class="attr-name">onClick</span>={goToProfile}&gt;<span class="punctuation">Go to Profile 123</span>&lt;/<span class="tag">button</span>&gt;
+    &lt;/&gt;
+  );
+};
 
 <span class="keyword">function</span> <span class="function">App</span>() {
   <span class="keyword">return</span> (
     &lt;<span class="tag">BrowserRouter</span>&gt;
-      &lt;<span class="tag">nav</span>&gt;&lt;<span class="tag">Link</span> <span class="attr-name">to</span>=<span class="attr-value">"/"</span>&gt;<span class="punctuation">Home</span>&lt;/<span class="tag">Link</span>&gt;&lt;/<span class="tag">nav</span>&gt;
+      &lt;<span class="tag">nav</span> <span class="attr-name">style</span>={{ <span class="variable">display</span>:<span class="string">'flex'</span>, <span class="variable">gap</span>:<span class="string">'1rem'</span> }}&gt;
+        &lt;<span class="tag">Link</span> <span class="attr-name">to</span>=<span class="attr-value">"/"</span>&gt;<span class="punctuation">Home</span>&lt;/<span class="tag">Link</span>&gt;
+        &lt;<span class="tag">Link</span> <span class="attr-name">to</span>=<span class="attr-value">"/dashboard"</span>&gt;<span class="punctuation">Dashboard</span>&lt;/<span class="tag">Link</span>&gt;
+        &lt;<span class="tag">Link</span> <span class="attr-name">to</span>=<span class="attr-value">"/user/abc"</span>&gt;<span class="punctuation">Profile (abc)</span>&lt;/<span class="tag">Link</span>&gt;
+      &lt;/<span class="tag">nav</span>&gt;
+
       &lt;<span class="tag">Routes</span>&gt;
-        &lt;<span class="tag">Route</span> <span class="attr-name">path</span>=<span class="attr-value">"/"</span> <span class="attr-name">element</span>={&lt;<span class="tag">HomePage</span> /&gt;} /&gt;
+        &lt;<span class="tag">Route</span> <span class="attr-name">path</span>=<span class="attr-value">"/"</span> <span class="attr-name">element</span>={&lt;<span class="tag">Home</span> /&gt;} /&gt;
+        &lt;<span class="tag">Route</span> <span class="attr-name">path</span>=<span class="attr-value">"/dashboard"</span> <span class="attr-name">element</span>={&lt;<span class="tag">Dashboard</span> /&gt;} /&gt;
+        &lt;<span class="tag">Route</span> <span class="attr-name">path</span>=<span class="attr-value">"/user/:userId"</span> <span class="attr-name">element</span>={&lt;<span class="tag">Profile</span> /&gt;} /&gt;
       &lt;/<span class="tag">Routes</span>&gt;
     &lt;/<span class="tag">BrowserRouter</span>&gt;
   );
-}</pre></div>
+}
+</pre></div>
                     </div>
                     <div class="card">
                         <h4>Redux Toolkit</h4>
-                        <p>The official, recommended way to write Redux logic for global state management.</p>
-                        <div class="code-block"><pre><span class="comment">// npm install @reduxjs/toolkit react-redux</span>
-<span class="comment">// features/counter/counterSlice.js</span>
-<span class="keyword">export const</span> <span class="variable">counterSlice</span> = createSlice({
+                        <p>The official, recommended way to write Redux logic for global state management. It simplifies store setup, slice creation, and reduces boilerplate.</p>
+                        <h5>Core Concepts:</h5>
+                        <ul>
+                            <li><code>configureStore</code>: Creates a Redux store with sensible defaults.</li>
+                            <li><code>createSlice</code>: A function that accepts an initial state, an object of reducer functions, and a "slice name", and automatically generates action creators and action types.</li>
+                            <li><code>Provider</code>: The component from `react-redux` to make the store available to your app.</li>
+                            <li><code>useSelector</code>: A hook to extract data from the Redux store state.</li>
+                            <li><code>useDispatch</code>: A hook to get the `dispatch` function to send actions to the store.</li>
+                        </ul>
+                        <div class="code-block"><pre><span class="comment">// 1. Install libraries</span>
+<span class="variable">npm install @reduxjs/toolkit react-redux</span>
+
+<span class="comment">// 2. Create a Redux store slice (e.g., features/counter/counterSlice.js)</span>
+<span class="keyword">import</span> { createSlice } <span class="keyword">from</span> <span class="string">'@reduxjs/toolkit'</span>;
+
+<span class="keyword">export const</span> counterSlice = createSlice({
   <span class="variable">name</span>: <span class="string">'counter'</span>,
   <span class="variable">initialState</span>: { <span class="variable">value</span>: <span class="number">0</span> },
   <span class="variable">reducers</span>: {
-    <span class="function">increment</span>: <span class="variable">state</span> => { <span class="variable">state</span>.value += <span class="number">1</span> },
-  }
-});</pre></div>
+    <span class="function">increment</span>: <span class="variable">state</span> => { <span class="variable">state</span>.value += <span class="number">1</span>; },
+    <span class="function">decrement</span>: <span class="variable">state</span> => { <span class="variable">state</span>.value -= <span class="number">1</span>; },
+    <span class="function">incrementByAmount</span>: (<span class="variable">state</span>, <span class="variable">action</span>) => {
+      <span class="variable">state</span>.value += action.payload;
+    },
+  },
+});
+<span class="keyword">export const</span> { increment, decrement, incrementByAmount } = counterSlice.actions;
+<span class="keyword">export default</span> counterSlice.reducer;
+
+<span class="comment">// 3. Configure the store (e.g., app/store.js)</span>
+<span class="keyword">import</span> { configureStore } <span class="keyword">from</span> <span class="string">'@reduxjs/toolkit'</span>;
+<span class="keyword">import</span> counterReducer <span class="keyword">from</span> <span class="string">'../features/counter/counterSlice'</span>;
+
+<span class="keyword">export const</span> store = configureStore({
+  <span class="variable">reducer</span>: {
+    <span class="variable">counter</span>: counterReducer,
+  },
+});
+
+<span class="comment">// 4. Provide the store to your app (e.g., main.jsx)</span>
+<span class="keyword">import</span> { Provider } <span class="keyword">from</span> <span class="string">'react-redux'</span>;
+<span class="keyword">import</span> { store } <span class="keyword">from</span> <span class="string">'./app/store'</span>;
+ReactDOM.createRoot(document.getElementById(<span class="string">'root'</span>)).render(
+  &lt;<span class="tag">Provider</span> <span class="attr-name">store</span>={store}&gt;
+    &lt;<span class="tag">App</span> /&gt;
+  &lt;/<span class="tag">Provider</span>&gt;
+);
+
+<span class="comment">// 5. Use the state and actions in a component</span>
+<span class="keyword">import</span> { useSelector, useDispatch } <span class="keyword">from</span> <span class="string">'react-redux'</span>;
+<span class="keyword">import</span> { increment, decrement } <span class="keyword">from</span> <span class="string">'./features/counter/counterSlice'</span>;
+
+<span class="keyword">function</span> <span class="function">Counter</span>() {
+  <span class="keyword">const</span> <span class="variable">count</span> = useSelector((<span class="variable">state</span>) => <span class="variable">state</span>.counter.value);
+  <span class="keyword">const</span> <span class="variable">dispatch</span> = useDispatch();
+
+  <span class="keyword">return</span> (
+    &lt;&gt;
+      &lt;<span class="tag">button</span> <span class="attr-name">onClick</span>={() => dispatch(increment())}&gt;<span class="punctuation">+</span>&lt;/<span class="tag">button</span>&gt;
+      &lt;<span class="tag">span</span>&gt;<span class="punctuation">{count}</span>&lt;/<span class="tag">span</span>&gt;
+      &lt;<span class="tag">button</span> <span class="attr-name">onClick</span>={() => dispatch(decrement())}&gt;<span class="punctuation">-</span>&lt;/<span class="tag">button</span>&gt;
+    &lt;/&gt;
+  );
+}
+</pre></div>
                     </div>
                     <div class="card">
                         <h4>React Debugging</h4>
@@ -1408,50 +1691,99 @@ Greeting.propTypes = {
             <!-- TypeScript and Next.js -->
             <section class="section" data-topic="TypeScript 5 Fundamentals Building React Apps With TypeScript React With Next.Js">
                 <h2>🚀 Advanced: TypeScript & Next.js</h2>
+
                 <h3>Building React Apps with TypeScript</h3>
-                <p>TypeScript adds static typing to JavaScript, helping you catch errors early and build more robust applications.</p>
-                <div class="card">
-                    <h4>Creating a TypeScript React App</h4>
-                    <p>Use a template when initializing your project with Vite or Next.js.</p>
-                    <div class="code-block"><pre><span class="comment"># Vite with TypeScript</span>
-<span class="variable">npm create vite@latest my-ts-app -- --template react-ts</span>
+                <p>TypeScript adds static typing to JavaScript. This means you can declare the "shape" of your data, and TypeScript will check your code for mistakes before you even run it. It's invaluable for large projects.</p>
 
-<span class="comment"># Next.js (will prompt you to use TypeScript)</span>
-<span class="variable">npx create-next-app@latest</span></pre></div>
-                </div>
-                <div class="card">
-                    <h4>Typing Props and State</h4>
-                    <p>Define types for your component's props and state variables.</p>
-                    <div class="code-block"><pre><span class="keyword">import</span> { <span class="variable">useState</span> } <span class="keyword">from</span> <span class="string">'react'</span>;
+                <div class="grid">
+                    <div class="card">
+                        <h4>Typing Component Props</h4>
+                        <p>Define the types for your component's props using an `interface` or `type`. For children, use `React.ReactNode`.</p>
+                        <div class="code-block"><pre><span class="keyword">import</span> type { ReactNode } <span class="keyword">from</span> <span class="string">'react'</span>;
 
-<span class="comment">// Define the shape of the props object</span>
-<span class="keyword">type</span> <span class="variable">GreetingProps</span> = {
-  <span class="variable">name</span>: <span class="keyword">string</span>;
-  <span class="variable">messageCount</span>?: <span class="keyword">number</span>; <span class="comment">// Optional prop</span>
+<span class="keyword">type</span> <span class="variable">CardProps</span> = {
+  <span class="variable">title</span>: <span class="keyword">string</span>;
+  <span class="variable">children</span>: <span class="variable">ReactNode</span>;
+  <span class="variable">isFeatured</span>?: <span class="keyword">boolean</span>; <span class="comment">// Optional prop</span>
 };
 
-<span class="keyword">export default function</span> <span class="function">Greeting</span>({ <span class="variable">name</span>, <span class="variable">messageCount</span> = <span class="number">0</span> }: <span class="variable">GreetingProps</span>) {
-  <span class="comment">// Type inference for state</span>
-  <span class="keyword">const</span> [<span class="variable">count</span>, <span class="variable">setCount</span>] = useState&lt;<span class="keyword">number</span>&gt;(<span class="number">0</span>);
-
-  <span class="keyword">return</span> &lt;<span class="tag">div</span>&gt;<span class="punctuation">Hello, {name}!</span>&lt;/<span class="tag">div</span>&gt;;
+<span class="keyword">export default function</span> <span class="function">Card</span>({ <span class="variable">title</span>, <span class="variable">children</span>, <span class="variable">isFeatured</span> }: <span class="variable">CardProps</span>) {
+  <span class="keyword">const</span> <span class="variable">cardClasses</span> = isFeatured ? <span class="string">'featured-card'</span> : <span class="string">'card'</span>;
+  <span class="keyword">return</span> (
+    &lt;<span class="tag">div</span> <span class="attr-name">className</span>={cardClasses}&gt;
+      &lt;<span class="tag">h3</span>&gt;<span class="punctuation">{title}</span>&lt;/<span class="tag">h3</span>&gt;
+      <span class="punctuation">{children}</span>
+    &lt;/<span class="tag">div</span>&gt;
+  );
 }</pre></div>
+                    </div>
+
+                    <div class="card">
+                        <h4>Typing Hooks</h4>
+                        <p>Provide types for hooks like `useState` and `useRef` to ensure type safety for your state and refs.</p>
+                        <div class="code-block"><pre><span class="keyword">import</span> { useState, useRef } <span class="keyword">from</span> <span class="string">'react'</span>;
+
+<span class="keyword">type</span> <span class="variable">User</span> = { <span class="variable">id</span>: <span class="keyword">number</span>; <span class="variable">name</span>: <span class="keyword">string</span>; };
+
+<span class="keyword">function</span> <span class="function">UserComponent</span>() {
+  <span class="comment">// useState can be initialized with a value or null</span>
+  <span class="keyword">const</span> [<span class="variable">user</span>, <span class="variable">setUser</span>] = useState&lt;<span class="variable">User</span> | <span class="keyword">null</span>&gt;(<span class="keyword">null</span>);
+
+  <span class="comment">// useRef needs a generic for the type of element it will hold</span>
+  <span class="keyword">const</span> <span class="variable">inputRef</span> = useRef&lt;<span class="variable">HTMLInputElement</span>&gt;(<span class="keyword">null</span>);
+
+  <span class="keyword">const</span> <span class="function">login</span> = () => {
+    setUser({ <span class="variable">id</span>: <span class="number">1</span>, <span class="variable">name</span>: <span class="string">'Alice'</span> });
+  };
+
+  <span class="keyword">return</span> <span class="comment">/* ... */</span>;
+}</pre></div>
+                    </div>
+                    <div class="card">
+                        <h4>Typing Events</h4>
+                        <p>Use the specific event types provided by React, like `React.ChangeEvent` for inputs or `React.MouseEvent` for clicks.</p>
+                        <div class="code-block"><pre><span class="keyword">function</span> <span class="function">EventComponent</span>() {
+  <span class="keyword">const</span> <span class="function">handleInputChange</span> = (<span class="variable">event</span>: <span class="variable">React.ChangeEvent</span>&lt;<span class="variable">HTMLInputElement</span>&gt;) => {
+    console.log(event.target.value);
+  };
+
+  <span class="keyword">const</span> <span class="function">handleButtonClick</span> = (<span class="variable">event</span>: <span class="variable">React.MouseEvent</span>&lt;<span class="variable">HTMLButtonElement</span>&gt;) => {
+    console.log(<span class="string">'Button clicked!'</span>);
+  };
+
+  <span class="keyword">return</span> (
+    &lt;&gt;
+      &lt;<span class="tag">input</span> <span class="attr-name">onChange</span>={handleInputChange} /&gt;
+      &lt;<span class="tag">button</span> <span class="attr-name">onClick</span>={handleButtonClick}&gt;<span class="punctuation">Click</span>&lt;/<span class="tag">button</span>&gt;
+    &lt;/&gt;
+  );
+}</pre></div>
+                    </div>
                 </div>
 
                 <h3>React with Next.js</h3>
-                <p>Next.js is a powerful React framework for building full-stack web applications. It provides server-side rendering, routing, API routes, and more.</p>
+                <p>Next.js is a powerful React framework for building full-stack web applications. It extends React with features like routing, server-side rendering, and API endpoints.</p>
                 <div class="grid">
                     <div class="card">
-                        <h4>File-based Routing</h4>
-                        <p>Pages are automatically routed based on the file system. `pages/about.js` becomes the `/about` route.</p>
+                        <h4>App Router vs. Pages Router</h4>
+                        <p>Next.js has evolved from the "Pages Router" (files in `pages/` become routes) to the new "App Router" (special files like `page.js`, `layout.js`, and `loading.js` in the `app/` directory define routes and UI).</p>
                     </div>
                     <div class="card">
-                        <h4>Server Components</h4>
-                        <p>Next.js introduces Server Components, which run on the server and can directly access databases or file systems, improving performance.</p>
+                        <h4>Server Components (App Router)</h4>
+                        <p>By default, components in the App Router are <strong>Server Components</strong>. They run on the server, so they can perform tasks like fetching data directly from a database. They cannot use hooks like `useState`. To use hooks, you must add the `"use client"` directive at the top of the file.</p>
                     </div>
                     <div class="card">
                         <h4>API Routes</h4>
-                        <p>Create serverless API endpoints inside your Next.js app by adding files to the `pages/api` directory.</p>
+                        <p>Create serverless API endpoints by adding a `route.js` file (App Router) or a file in `pages/api` (Pages Router).</p>
+                        <div class="code-block"><pre><span class="comment">// In app/api/hello/route.js (App Router)</span>
+<span class="keyword">import</span> { NextResponse } <span class="keyword">from</span> <span class="string">'next/server'</span>;
+
+<span class="keyword">export async function</span> <span class="function">GET</span>(<span class="variable">request</span>: <span class="variable">Request</span>) {
+  <span class="keyword">return</span> NextResponse.json({ <span class="variable">message</span>: <span class="string">'Hello, World!'</span> });
+}
+
+<span class="comment">// This creates an endpoint at /api/hello</span>
+</pre></div>
                     </div>
                 </div>
             </section>
@@ -1895,6 +2227,199 @@ Greeting.propTypes = {
         } else {
             console.error('accordionDemo container not found');
         }
+
+        // --- useReducer Demo: To-Do List ---
+        const todoReducer = (state, action) => {
+            switch (action.type) {
+                case 'ADD_TODO':
+                    return [...state, { id: Date.now(), text: action.payload, completed: false }];
+                case 'TOGGLE_TODO':
+                    return state.map(todo =>
+                        todo.id === action.payload ? { ...todo, completed: !todo.completed } : todo
+                    );
+                case 'DELETE_TODO':
+                    return state.filter(todo => todo.id !== action.payload);
+                default:
+                    return state;
+            }
+        };
+
+        const UseReducerDemo = () => {
+            const [todos, dispatch] = React.useReducer(todoReducer, []);
+            const [text, setText] = React.useState('');
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                if (text.trim()) {
+                    dispatch({ type: 'ADD_TODO', payload: text });
+                    setText('');
+                }
+            };
+
+            return (
+                <div>
+                    <form onSubmit={handleSubmit}>
+                        <input
+                            type="text"
+                            value={text}
+                            onChange={(e) => setText(e.target.value)}
+                            placeholder="Add a new to-do"
+                            style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc', marginRight: '10px' }}
+                        />
+                        <button type="submit" className="interactive-btn">Add</button>
+                    </form>
+                    <ul style={{ listStyleType: 'none', padding: 0, marginTop: '15px' }}>
+                        {todos.map(todo => (
+                            <li key={todo.id} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                                <span
+                                    onClick={() => dispatch({ type: 'TOGGLE_TODO', payload: todo.id })}
+                                    style={{ textDecoration: todo.completed ? 'line-through' : 'none', cursor: 'pointer', flexGrow: 1 }}
+                                >
+                                    {todo.text}
+                                </span>
+                                <button
+                                    onClick={() => dispatch({ type: 'DELETE_TODO', payload: todo.id })}
+                                    className="interactive-btn"
+                                    style={{ background: '#e74c3c', marginLeft: '10px' }}
+                                >
+                                    Delete
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            );
+        };
+        const useReducerContainer = document.getElementById('useReducerDemo');
+        if(useReducerContainer) ReactDOM.createRoot(useReducerContainer).render(<UseReducerDemo />);
+
+        // --- useRef Demo ---
+        const UseRefDemo = () => {
+            const inputRef = React.useRef(null);
+            const renderCount = React.useRef(0);
+            const [time, setTime] = React.useState(Date.now());
+
+            React.useEffect(() => {
+                renderCount.current = renderCount.current + 1;
+            });
+
+            const handleFocus = () => {
+                inputRef.current.focus();
+            };
+
+            const forceRender = () => setTime(Date.now());
+
+            return (
+                <div>
+                    <input ref={inputRef} type="text" placeholder="I can be focused" style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }} />
+                    <button onClick={handleFocus} className="interactive-btn" style={{ marginLeft: '10px' }}>Focus Input</button>
+                    <div style={{ marginTop: '15px' }}>
+                        <p>This component has rendered <strong>{renderCount.current}</strong> times.</p>
+                        <button onClick={forceRender} className="interactive-btn">Force Re-render</button>
+                        <p style={{ fontSize: '0.9rem', color: '#666' }}>Note how the render count updates, but changing a ref value itself wouldn't cause this.</p>
+                    </div>
+                </div>
+            );
+        };
+        const useRefContainer = document.getElementById('useRefDemo');
+        if(useRefContainer) ReactDOM.createRoot(useRefContainer).render(<UseRefDemo />);
+
+        // --- useContext Demo ---
+        const ThemeContext = React.createContext();
+
+        const ThemedButton = () => {
+            const { theme, toggleTheme } = React.useContext(ThemeContext);
+            const style = {
+                backgroundColor: theme === 'light' ? '#eee' : '#333',
+                color: theme === 'light' ? '#000' : '#fff',
+                border: '1px solid',
+                padding: '10px 20px',
+                borderRadius: '5px',
+                cursor: 'pointer'
+            };
+            return <button style={style} onClick={toggleTheme}>Toggle Theme</button>;
+        };
+
+        const Toolbar = () => {
+            return (
+                <div>
+                    <ThemedButton />
+                </div>
+            );
+        };
+
+        const UseContextDemo = () => {
+            const [theme, setTheme] = React.useState('light');
+            const toggleTheme = () => setTheme(theme === 'light' ? 'dark' : 'light');
+
+            return (
+                <ThemeContext.Provider value={{ theme, toggleTheme }}>
+                    <p>Current theme: <strong>{theme}</strong>. The button below consumes this from context.</p>
+                    <Toolbar />
+                </ThemeContext.Provider>
+            );
+        };
+        const useContextContainer = document.getElementById('useContextDemo');
+        if(useContextContainer) ReactDOM.createRoot(useContextContainer).render(<UseContextDemo />);
+
+        // --- useMemo & useCallback Demo ---
+        const slowFunction = (num) => {
+            console.log('Calling Slow Function...');
+            for (let i = 0; i <= 1000000000; i++) {}
+            return num * 2;
+        };
+
+        const ChildComponent = React.memo(({ onClick }) => {
+            console.log('Child Component Rendered');
+            return <button onClick={onClick} className="interactive-btn">Click Me</button>;
+        });
+
+        const MemoizationDemo = () => {
+            const [number, setNumber] = React.useState(1);
+            const [dark, setDark] = React.useState(false);
+
+            // useMemo: Re-runs slowFunction only when 'number' changes
+            const doubleNumber = React.useMemo(() => {
+                return slowFunction(number);
+            }, [number]);
+
+            // useCallback: The 'handleClick' function reference doesn't change on re-renders
+            // unless 'doubleNumber' changes. This prevents ChildComponent from re-rendering
+            // when only the theme is changed.
+            const handleClick = React.useCallback(() => {
+                console.log('Button clicked! Double number is:', doubleNumber);
+            }, [doubleNumber]);
+
+            const themeStyles = {
+                backgroundColor: dark ? '#333' : '#FFF',
+                color: dark ? '#FFF' : '#333',
+                padding: '20px',
+                borderRadius: '8px',
+                transition: 'all 0.3s linear'
+            };
+
+            return (
+                <div style={themeStyles}>
+                    <p>Open your browser console to see the effects of memoization.</p>
+                    <input
+                        type="number"
+                        value={number}
+                        onChange={e => setNumber(parseInt(e.target.value))}
+                        style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+                    />
+                    <button onClick={() => setDark(prevDark => !prevDark)} className="interactive-btn" style={{marginLeft: '10px'}}>
+                        Change Theme
+                    </button>
+                    <h3 style={{marginTop: '15px'}}>Calculated Number: {doubleNumber}</h3>
+                    <div style={{marginTop: '15px'}}>
+                        <ChildComponent onClick={handleClick} />
+                    </div>
+                </div>
+            );
+        };
+        const memoizationContainer = document.getElementById('memoizationDemo');
+        if(memoizationContainer) ReactDOM.createRoot(memoizationContainer).render(<MemoizationDemo />);
+
     </script>
 
     <script>
